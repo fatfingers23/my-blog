@@ -3,11 +3,13 @@
 </script>
 
 <template>
-  <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+  <main class="bg-base-200">
+    <div class="container mx-auto md:p-8 p-3 min-h-screen">
+      <RouterView />
+    </div>
+  </main>
 </template>
 
 <style scoped>
-
+  
 </style>

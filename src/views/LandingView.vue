@@ -1,10 +1,11 @@
 <script setup lang="ts">
-
+import ArticleList from "../components/ArticleList.vue";
 	
 	
 </script>
 
 <template>
+	<div class="flex flex-col">
 	<div
 		id="Me"
 		class="hero py-10 flex justify-center">
@@ -27,6 +28,9 @@ GitHub</a>
 	</div>
 	</div>
 
+	<ArticleList class="px-5"
+	/>
+	</div>
 </template>
 
 <style scoped>

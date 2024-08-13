@@ -35,6 +35,12 @@
         </article>
       </template>
     </ContentDoc>
+    <NuxtLink
+      to="/"
+      class="text-blue-500 hover:underline mb-4 inline-block"
+    >
+      &larr; Back to Articles
+    </NuxtLink>
   </div>
 </template>
 

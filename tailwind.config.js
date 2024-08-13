@@ -13,8 +13,7 @@ export default {
         extend: {},
     },
     plugins: [
-        //eslint-disable-next-line
-        require('daisyui'),
+        require("daisyui"),
     ],
 };
 

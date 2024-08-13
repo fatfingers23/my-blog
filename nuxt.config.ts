@@ -1,6 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    modules: ["@nuxt/content", "@nuxtjs/tailwindcss", "@nuxt/image", "@nuxt/eslint"],
+    modules: [
+        "@nuxt/content",
+        "@nuxtjs/tailwindcss",
+        "@nuxt/image",
+        "@nuxt/eslint"],
     vue: {
         compilerOptions: {
             isCustomElement: (tag) => ["UseFetchDemo"].includes(tag),

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {ref} from "vue";
-import {useHead} from "../.nuxt/imports";
-import { onMounted } from "vue";
+import {ref,onMounted} from "vue";
+import {useHead} from "@unhead/vue";
+
 
 useHead({
   title: "FatFingers Blog",
@@ -13,11 +13,9 @@ useHead({
   ]
 });
 
-let darkMode = ref(false);
+const darkMode = ref(false);
 onMounted(() => {
   if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-    // dark mode
-
     darkMode.value = true;
   }
 });

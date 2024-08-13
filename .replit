@@ -5,9 +5,8 @@ run = "bun run dev"
 channel = "stable-24_05"
 
 [[ports]]
-localPort = 5173
-externalPort = 80
-exposeLocalhost = true
+localPort = 3000
+externalPort = 3000
 
 [deployment]
 run = ["sh", "-c", "bun run dev"]

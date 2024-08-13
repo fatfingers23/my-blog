@@ -32,5 +32,9 @@ export default defineNuxtConfig({
             charset: "utf-8",
             viewport: "width=device-width, initial-scale=1",
         }
-    }
+    },
+    routeRules: {
+        // this page is generated at build time and cached permanently
+        "/articles/**": { prerender: true },
+    },
 });

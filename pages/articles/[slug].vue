@@ -1,7 +1,5 @@
 <script setup lang="ts">
-const route = useRoute();
-const { article } = await useAsyncData("article", () => queryContent(route.path).findOne());
-useContentHead(article);
+
 </script>
 
 <template>
@@ -12,12 +10,12 @@ useContentHead(article);
     >
       &larr; Back to Articles
     </NuxtLink>
-    <ContentDoc >
+    <ContentDoc>
       <template #not-found>
         <h1>This article has not been written yet</h1>
       </template>
       <template #default="{ doc }">
-        <article>
+        <article class="prose">
           <figure class="mb-6">
             <img
               :src="doc.image.src"
@@ -26,7 +24,7 @@ useContentHead(article);
             >
           </figure>
           <div class="p-6 rounded-lg mb-6">
-            <h1 class="mb-2 font-poppins text-3xl font-black md:text-5xl uppercase">
+            <h1 class="mb-2 font-poppins text-2xl font-black md:text-4xl ">
               {{ doc.title }}
             </h1>
             <p class="text-gray-600">

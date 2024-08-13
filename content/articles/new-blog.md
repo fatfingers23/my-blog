@@ -14,4 +14,6 @@ head:
 ---
 
 
-## So
+# First a bit about me 
+
+

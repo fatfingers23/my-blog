@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Articles from "../Articles.json";
+import Articles from "../assets/articles.json";
 </script>
 
 <template>

@@ -1,11 +1,26 @@
 <script setup lang="ts">
-import ArticleList from "../components/ArticleList.vue";
 import {ref} from "vue";
+import {useHead} from "../.nuxt/imports";
+import { onMounted } from "vue";
+
+useHead({
+  title: "FatFingers Blog",
+  meta: [
+    {
+      name: "description",
+      content: "A personal blog about whatever I'm interested in at the moment."
+    }
+  ]
+});
 
 let darkMode = ref(false);
-if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-  darkMode.value = true;
-}
+onMounted(() => {
+  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    // dark mode
+
+    darkMode.value = true;
+  }
+});
 
 </script>
 

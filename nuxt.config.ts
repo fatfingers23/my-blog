@@ -4,7 +4,9 @@ export default defineNuxtConfig({
         "@nuxt/content",
         "@nuxtjs/tailwindcss",
         "@nuxt/image",
-        "@nuxt/eslint"],
+        "@nuxt/eslint",
+        "@nuxthq/studio"
+    ],
 
     components: {
         global: true,

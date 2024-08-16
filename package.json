@@ -23,6 +23,7 @@
     "@nuxt/eslint": "^0.5.0",
     "@nuxt/eslint-config": "^0.5.0",
     "@nuxt/image": "^1.7.0",
+    "@nuxthq/studio": "^2.0.3",
     "@nuxtjs/tailwindcss": "6.12.0",
     "@tailwindcss/typography": "^0.5.14",
     "@types/node": "^20.10.4",

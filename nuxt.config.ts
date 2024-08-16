@@ -14,8 +14,19 @@ export default defineNuxtConfig({
         // https://content.nuxtjs.org/api/configuration
         highlight: {
             // Theme used in all color schemes.
-
-            // OR
+            langs: [
+                "php",
+                "json",
+                "js",
+                "ts",
+                "html",
+                "css",
+                "vue",
+                "shell",
+                "mdc",
+                "md",
+                "yaml"
+            ],
             theme: {
                 // Default theme (same as single string)
                 default: "github-dark",
@@ -23,7 +34,7 @@ export default defineNuxtConfig({
                 dark: "github-dark",
                 light: "github-light",
                 // Theme used if `html.sepia`
-                sepia: "monokai"
+                sepia: "monokai",
             }
         }
     },
@@ -35,6 +46,6 @@ export default defineNuxtConfig({
     },
     routeRules: {
         // this page is generated at build time and cached permanently
-        "/articles/**": { prerender: true },
+        "/articles/**": {prerender: true},
     },
 });

@@ -228,7 +228,8 @@ But doing a `document.getElementById` for each input can get old quickly. [FormD
   </body>
 </html>
 ```
-This has been available across all major browsers since 2015, so it's not new. But I think it has been overlooked because many of us have moved on to greener pastors and do not write as much vanilla javascript without all the reactivity of a framework.
+This has been available across all major browsers since 2015, so it's not new. 
+But I think it has been overlooked because many of us have moved on to greener pastors and do not write as much vanilla javascript without all the reactivity of a framework.
 
 
 ### ~~Type~~ JavaScript
@@ -285,7 +286,9 @@ Before discussing this next topic, there are possible security risks with XSS, a
 
 Usually, when you think of templates, you think of something like `{{value}}` or even JSX. What I am going to show you does not have any reactivity to it. But it is good if you can't import anything else or want a simple code solution to throw up some more complex HTML from a JS action.
 
-I use this occasionally when I do not have a JS framework on the project and do not need to bring one in. The benefit is that I can see the HTML elements I am writing in a way that is easier for me to understand, and JetBrains can pick up the HTML in the strings and show my syntax highlights and completion.
+I use this occasionally when I do not have a JS framework on the project and do not need to bring one in. 
+The benefit is that I can see the HTML elements I am writing in a way that is easier for me to understand, and JetBrains IDE's can pick up the HTML in the strings and show my syntax highlights and completion.
+![Example photo showing html syntax in a JetBrains IDE](/article-assets/2/template_syntax.png)
 I create a function that can take the values I need in the template
 
 ```js

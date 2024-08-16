@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="p-6 shadow-md">
+  <div class="p-1 md:p-6 shadow-md">
     <NuxtLink
       to="/"
       class="text-blue-500 hover:underline mb-4 inline-block"

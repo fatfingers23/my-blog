@@ -28,6 +28,7 @@ You don't need to know these to be a successful developer, but if you do, it mak
 * [~~Type~~ JavaScript](#type-javascript)
   * [The Basics](#the-basics)
   * [Basic HTML templates with JS](#basic-html-templates-with-js)
+  * Vanilla Dates
   * Using NPM packages in `<sctipt>` tags
 
 ## Explanation of how this article is written and setup
@@ -253,11 +254,12 @@ You can select an element just about any which way you can imagine.
 ```
 
 You can...
-* `let byId = document.getElementById('app');`
-* `let byClass = document.getElementsByClassName('container');`
-* `let byTag = document.getElementsByTagName('div');`
-* `let byCssSelectors = document.querySelector('.container')`
-
+```js
+let byId = document.getElementById('app');
+let byClass = document.getElementsByClassName('container');
+let byTag = document.getElementsByTagName('div');
+let byCssSelectors = document.querySelector('.container')
+```
 Let's say you want to add a class.
 ```js
 let byId = document.getElementById('app');

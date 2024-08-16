@@ -9,10 +9,9 @@ const whichPanelToShow = ref(0);
 
 <template>
 
-  <div class="w-full md:w-1/2">
+  <div class="w-full ">
     <div
-      role="tablist"
-      class="tabs tabs-bordered">
+      class="tabs tabs-bordered max-w-prose">
       <span
         role="tab"
         :class="[{'tab cursor-pointer': true}, {'tab-active': whichPanelToShow == 0}]"
@@ -21,13 +20,6 @@ const whichPanelToShow = ref(0);
 
         {{codingLanguages[0]}}
       </span>
-      <div
-        role="tabpanel"
-        :class="[{'tab-content': true}, {'block': whichPanelToShow == 0}]">
-        <ContentSlot
-          :use="$slots.one"
-        /></div>
-
       <span
         role="tab"
         :class="[{'tab cursor-pointer': true}, {'tab-active': whichPanelToShow == 1}]"
@@ -35,16 +27,18 @@ const whichPanelToShow = ref(0);
       >
         {{codingLanguages[1]}}
       </span>
-      <div
-        role="tabpanel"
-        :class="[{'tab-content': true}, {'block': whichPanelToShow == 1}]">
-        <ContentSlot
-          :use="$slots.two"
-        />
-      </div>
-
     </div>
+
+    <ContentSlot
+      v-if="whichPanelToShow == 0"
+      :use="$slots.one"
+    />
+    <ContentSlot
+      v-if="whichPanelToShow == 1"
+      :use="$slots.two"
+    />
   </div>
+
 
 </template>
 

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-
+const whereQuery = import.meta.dev ? null : [{draft: false}];
 </script>
 
 <template>
   <ContentList
     v-slot="{ list }"
     path="/articles"
+    :where="whereQuery"
     :sort="[{ date: -1 }]"
   >
     <div class="pb-10">

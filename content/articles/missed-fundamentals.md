@@ -276,7 +276,7 @@ let newElement = document.createElement('span');
 newElement.innerText = 'I am a new span';
 byId.appendChild(newElement);
 ```
-There's a good chance you already knew this, but I'm sure I drove home the point: YOU CAN DO THIS ON ANY WEB PAGE. Try it on any website you've made in your preferred framework, open the dev console, and interact with elements.
+The possibilities are endless for how you can interact with elements. There's a good chance you already knew this, but I'm sure I drove home the point: YOU CAN DO THIS ON ANY WEB PAGE. Try it on any website you've made in your preferred framework, open the dev console, and interact with elements.
 
 #### Basic HTML templates with JS
 Before discussing this next topic, there are possible security risks with XSS, as shown in some of what I will show you. Do not trust any user input at any time without some sanitization, especially for this.

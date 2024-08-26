@@ -28,7 +28,7 @@ You don't need to know these to be a successful developer, but if you do, it mak
 * [~~Type~~ JavaScript](#type-javascript)
   * [The Basics](#the-basics)
   * [Basic HTML templates with JS](#basic-html-templates-with-js)
-  * Vanilla Dates
+  * [Vanilla Dates](#vanilla-dates)
   * Using NPM packages in `<sctipt>` tags
 
 ## Explanation of how this article is written and setup
@@ -310,3 +310,6 @@ function responseTemplate(message,img){
 
 ![You have heard of me](/article-assets/2/heard_of_me.gif)
 
+#### Vanilla Dates
+This one is really simple and im sure many know it already. But I still see some people
+trip up on it and not always at the top of stackoverflow answers.

@@ -8,8 +8,10 @@ image:
     alt: ""
 head:
     meta:
+      - name: "twitter:card"
+        content: "summary"
       - name: "twitter:image"
-        content: "/article-assets/2/cover.png"
+        content: "https://baileytownsend.dev/article-assets/2/cover.png"
       - name: "twitter:title"
         content: ""
       - name: "twitter:description"

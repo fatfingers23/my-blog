@@ -1,7 +1,7 @@
 ---
-title: 'Missed Fundamentals'
-description: 'I talk about some of the basics I think are missed from learning with a framework'
-date: "2024-08-16T01:08:00Z"
+title: 'Missed Fundamentals In Web Development'
+description: 'I talk about some of the basics I think are missed from learning web development with a full framework'
+date: "2024-08-26T01:03:34Z"
 draft: true
 image:
     src: "/article-assets/2/cover.png"
@@ -12,6 +12,16 @@ head:
         content: "js, php, code, learn, basics"
       - name: 'author'
         content: 'Bailey Townsend'
+      - name: "twitter:card"
+        content: "summary"
+      - name: "twitter:image"
+        content: "https://baileytownsend.dev/article-assets/2/cover.png"
+      - name: "twitter:title"
+        content: "Missed Fundamentals In Web Development"
+      - name: "twitter:description"
+        content: "I talk about some of the basics I think are missed from learning web development with a full framework"
+      - name: "twitter:creator"
+        content: "@FatFingers23"
 ---
 
 There are some basic fundamentals of web development that we more seasoned developers forget about. This article will not be groundbreaking, and it will not always be the best practice. However, it is intended to showcase some fundamental concepts about web development and how these are handled without a framework. These are a few things I have seen over my years working with juniors and other senior developers who may just now be moving to the web space.
@@ -311,5 +321,32 @@ function responseTemplate(message,img){
 ![You have heard of me](/article-assets/2/heard_of_me.gif)
 
 #### Vanilla Dates
-This one is really simple and im sure many know it already. But I still see some people
-trip up on it and not always at the top of stackoverflow answers.
+This one is straightforward, and I'm sure many know it already. But I still see some people
+trip up on it and not always at the top of Stackoverflow answers.
+
+Let's say you have a datetime like `2024-08-26 03:00:00.000` and you want to show it in an easier way to read.
+You may see something like this as taken from this [Stackoverflow question](https://stackoverflow.com/a/25275808) that showed up when I googled `format a datetime js`.
+```js
+function formatDate(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
+}
+
+var d = new Date();
+var e = formatDate(d);
+
+alert(e);
+```
+```js
+const dateTimeFromDb = "2024-08-26 03:45:32.9916342";
+const date = new Date(dateTimeFromDb);
+console.log(date.toLocaleString())
+// 8/26/2024, 3:00:00 AM
+
+```

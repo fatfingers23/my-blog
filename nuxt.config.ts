@@ -27,7 +27,8 @@ export default defineNuxtConfig({
                 "shell",
                 "mdc",
                 "md",
-                "yaml"
+                "yaml",
+                "rust"
             ],
             theme: {
                 // Default theme (same as single string)

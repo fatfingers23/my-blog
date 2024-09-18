@@ -102,6 +102,8 @@ on the robot during POC.
 
 # Getting It To Work With Rust And The Pico 
 
+![The robot holding a Raspberry Pico in it's claw](/article-assets/3/pico_in_hand.jpg)
+
 The examples in the previous article were all done on a Raspberry Pi Zero using Pigpio. But I want to use a Pico and Rust,
 more specifically [embassy_rp](https://docs.embassy.dev/embassy-rp/git/rp2040/index.html), my current go-to crate for writing any code for the Pico.
 The code is nothing to write home about, but it gets the job done for a proof of concept! 

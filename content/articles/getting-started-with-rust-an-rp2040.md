@@ -99,12 +99,11 @@ If your pico does not have the three-pin JST-SH port you will need to solder a 3
 ![Raspberry Pi Pico W connected to a breadboard with jumper wires attached, wired to a Raspberry Pi Debug Probe emitting red and yellow LEDs. The setup is displayed on a wooden desk, showcasing an active debugging or prototyping configuration.](https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rnpkyqnmsw4ipey6eotbdnnf/bafkreich3au7rf3gajf7rgjronn5ob343mnvvu3u64xc4ja5zham2ytwbi@jpeg){class="w-full object-cover rounded-lg "}
 
 
-If that was as clear as mud, You can check out the Raspberry Pi Debug Probe Documentation page for more info on wiring. Refer to the previous image if you have to use the jumper wires. From left to right; Orange (TX/SC), Black (GND), Yellow(RX/SD)
-https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html
+If that was as clear as mud, You can check out the [Raspberry Pi Debug Probe Documentation page](https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html) for more info on wiring. Refer to the previous image if you have to use the jumper wires. From left to right; Orange (TX/SC), Black (GND), Yellow(RX/SD)
 
 # Using a second pico as a debug probe
-You can use a spare Pico as the debug probe (You can also use a Pico 2 for this step). Raspberry Pi has excellent instructions on setting up the software on your Pico being as a debug probe. It boils down to downloading the uf2 listed and flashing it to your device.
-https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html#debugging-using-another-pico-series-device
+You can use a spare Pico as the debug probe (You can also use a Pico 2 for this step). [Raspberry Pi has excellent instructions](https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html#debugging-using-another-pico-series-device) on setting up the software on your Pico being as a debug probe. It boils down to downloading the uf2 listed and flashing it to your device.
+
 
 Using a pico as the debug probe can look a bit more daunting to set up. But it’s much the same as using the Debug Probe.  Pico A is the Probe B is the target
 
@@ -128,7 +127,7 @@ From left to right;
 - Black (GND)
 - Yellow(RX/SD)
 
-If you have any issues, you can refer to page 18 of this PDF https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
+If you have any issues, you can refer to [page 18 of this PDF](https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf)
 
 Note:
 You may have noticed that we did not connect UART on either of those, as shown in the documentation. That is because it is not strictly needed for what we are doing. But it should be noted if you do anything you send on UART0 from the target can be read via the serial connection the probe

@@ -1,7 +1,7 @@
 ---
 title: 'Running a HTTP server on the Pico W with Rust 🦀'
 description: 'Learn how to control your Pico W rust projects with HTTP requests and host simple web apps'
-date: "2024-12-02T20:00:00Z"
+date: "2024-12-03T05:11:00Z"
 draft: false
 image:
     src: "/article-assets/5/cover.jpg"

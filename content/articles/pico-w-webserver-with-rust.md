@@ -17,7 +17,7 @@ head:
       - name: 'author'
         content: 'Bailey Townsend'
 ---
-As seen on [Bluesky 🦋](https://bsky.app/profile/baileytownsend.dev/post/3lbq7o74fcc2d)
+As seen on [Bluesky 🦋](https://bsky.app/profile/baileytownsend.dev/post/3lcev3dcd5s2d)
 
 A 🧵on running a HTTP server on the Raspberry Pi Pico W with Rust 🦀
 

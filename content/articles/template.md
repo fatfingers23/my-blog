@@ -12,12 +12,6 @@ head:
         content: "summary"
       - name: "twitter:image"
         content: "https://baileytownsend.dev/article-assets/2/cover.png"
-      - name: "twitter:title"
-        content: ""
-      - name: "twitter:description"
-        content: ""
-      - name: "twitter:creator"
-        content: "@FatFingers23"
       - name: "keywords"    
         content: ""
       - name: 'author'

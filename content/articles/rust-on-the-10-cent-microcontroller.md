@@ -1,6 +1,6 @@
 ---
 title: 'Getting started with Rust 🦀 on the 10¢ microcontroller'
-description: 'Learn how to get started with writing Rust on the CH32v003'
+description: 'Learn how to get started with writing Rust on the ch32v003'
 date: "2025-01-20T23:00:00Z"
 draft: true
 image:
@@ -86,16 +86,63 @@ As with most of my posts, we are not going to be writing anything groundbreaking
 - [cargo-generate](https://github.com/ch32-rs/ch32-hal-template) for using the [ch32-hal-template](https://github.com/ch32-rs/ch32-hal-template)
 
 # Setting up the WCH-LinkE
-TODO: Show how to wire the debugger with both ribbon and just the 3 wires (power, gnd, and debug)
-TODO: Talk about how you can have logging and flash software with just 3 and dont need the ribbion
-TODO: Make sure to say which pin is SWD. I think it's PD1?
-TODO: Make sure to take a lot of different pictures of how its wired
-TODO: Test to see if you need the reset wire to do like wlink reset. Looks like just the 3 wires. No rst needed
+The ch32v003 has 1-wire serial debug interface that you can either use [wlink](https://github.com/ch32-rs/wlink) or
+[probe-rs](https://probe.rs/targets/master/CH32V003) to flash. Thanks to this it is super easy to wire. So far I have seen the debug pin labeled as 
+`DIO` on development boards, but the actual pin on the chip is named `PD1` or just `D1`.
+With just the single serial debug pin connected you can flash, debug log, and reset. There's even a `println!` macro for writing logs when using wlink.
+
+Some kits come with the ribbon cable that plugs into 2 rows of 5 pin headers. To connect this you just make sure you line them up.
+5v to 5v, 3v3 to 3v3, etc, etc. With this we are also powering the dev board from the WCH-LinkE.
+
+::two-pictures-side-by-side
+#one
+![The dev board connected to the WCH-LinkE via the ribbon cable](./article-assets/6/ribbon_cable_connected.webp)
+#two
+![The dev board, WCH-LinkE, and ribbon cable laid out ](./article-assets/6/ribbon_cable_laidout.webp)
+::
+
+The pins that are needed
+- 3v3 to 3v3 for power
+- GND to GND for ground
+- `SWDIO/TMS` on the WCH-LinkE is for the single wire serial debug. It connects to the pin labeled `DIO`, `PD1`, or `D1`.
+
+You can also use some jumper wires to connect them. For what we are using it for you just need to make sure `3v3`, `gnd`, and `SWDIO/TMS` is connected.
+
+
+![The dev board connected to the WCH-LinkE via jumper wires](./article-assets/6/jumper_wres_swd.webp)
+
+| Color  | WCH-LinkE    | Dev board            |
+|--------|--------------|----------------------|
+| YELLOW | `SDWDIO/TMS` | `DIO`,`PD1`, or `D1` |
+| RED    | `3v3`        | `3v`                 |
+| BLACK  | `GND`        | `GND`                |
+
 
 # Getting started with ch32-hal
-Talk about this post https://noxim.xyz/blog/rust-ch32v003/
-Show how to setup the project from cargo generate and talk about which port is the LED. Note the devboard and nanos LED
-Talk about how i use the multi meter to find the port?
+I have been using the [ch32-hal](https://github.com/ch32-rs/ch32-hal) and been loving it so far. With it, you have embassy support, 
+embedded-hal traits, and just about anything else you can need. They have done a great job with this crate. 
+
+**Before starting make sure you have set up everything following [Software Setup](#software-setup).**
+
+For starting a new project I just use their [template](https://github.com/ch32-rs/ch32-hal-template) with [cargo-generate](https://github.com/cargo-generate/cargo-generate).
+The command is `cargo generate ch32-rs/ch32-hal-template`. During setup it asks for;
+   * `Project Name`
+   * `Enable embassy (async) support` - recommended to set true for embassy support
+   * `Which MCU family to target` - ch32v003
+   * `Which ch32v003 variant to use` - Depends, the dev board I have is ch32v003F4P6. Can mostly just count the pins to check, is important to get this right.
+     * `ch32v003J4M6` - The SOP8 8pin variant
+     * `ch32v003A4M6` - The SOP16 16pin variant 
+     * `ch32v003F4P6` - The TSSOP20 20pin variant with 20pins that have "legs"
+     * `ch32v003F4U6` - The QFN20 20pin variant, square with no "legs", just solder pads.
+
+With those options you have a start project to blink a LED! Since every board is a little different the pin that has an LED varies. I used a [continuity test with my multimeter to find mine.](https://www.youtube.com/watch?v=5G622WDZaHg)
+Just __DO NOT__ use pins labeled `PD1` or `D1`. [More on that here](#unbricking-your-chip)
+* For the AliExpress board I have it was `PD4`
+* For the `nanoCH32V003` it looks to be `PD6` according to the [schematic](https://github.com/wuxx/nanoCH32V003/blob/master/hardware/nanoCH32V003.pdf)
+
+And that's it! With this you can start your ch32v003 adventure and make great projects. Can also find [examples here](https://github.com/ch32-rs/ch32-hal/tree/main/examples/ch32v003) for things like [SPI](https://github.com/ch32-rs/ch32-hal/blob/main/examples/ch32v003/src/bin/spi-lcd-st7735-cube.rs), [ADC](https://github.com/ch32-rs/ch32-hal/blob/main/examples/ch32v003/src/bin/adc.rs), [UART](https://github.com/ch32-rs/ch32-hal/blob/main/examples/ch32v003/src/bin/uart_tx.rs), and more.
+
+**If you want to know more about the process of bringing Rust to the ch32v003, you should check out this great series of blog posts. [Rust on the CH32V003](https://noxim.xyz/blog/rust-ch32v003/).**
 
 
 # "Unbricking" your chip

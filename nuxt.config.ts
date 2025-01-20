@@ -65,6 +65,6 @@ export default defineNuxtConfig({
     routeRules: {
         // this page is generated at build time and cached permanently
         "/articles/**": {prerender: true},
-        "/rss.xml": {prerender: true},
+        "/feed.rss": {prerender: true},
     },
 });

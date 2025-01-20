@@ -90,7 +90,7 @@ TODO: Show how to wire the debugger with both ribbon and just the 3 wires (power
 TODO: Talk about how you can have logging and flash software with just 3 and dont need the ribbion
 TODO: Make sure to say which pin is SWD. I think it's PD1?
 TODO: Make sure to take a lot of different pictures of how its wired
-TODO: Test to see if you need the reset wire to do like wlink reset
+TODO: Test to see if you need the reset wire to do like wlink reset. Looks like just the 3 wires. No rst needed
 
 # Getting started with ch32-hal
 Talk about this post https://noxim.xyz/blog/rust-ch32v003/

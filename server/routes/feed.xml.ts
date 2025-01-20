@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
         title: "Bailey Townsend's Blog",
         description: "Writings on what I am currently working on and interested in. Mostly covering embedded Rust and web development.",
         site_url: "https://baileytownsend.dev",
-        feed_url: "https://baileytownsend.dev/feed.rss",
+        feed_url: "https://baileytownsend.dev/feed.xml",
     });
 
     const docs = await serverQueryContent(event)

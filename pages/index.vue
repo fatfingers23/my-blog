@@ -70,7 +70,7 @@ onMounted(() => {
             </a>
 
             <a
-              href="/feed.rss"
+              href="/feed.xml"
               target="_blank"
               class="btn btn-outline btn-accent md:btn-lg rounded-full font-poppins shadow-md">
               RSS

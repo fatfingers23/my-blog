@@ -10,13 +10,11 @@ export default defineSitemapEventHandler(async (e) => {
         .map((c) => {
             return asSitemapUrl({
                 loc: `${c._path}`,
-
-                // lastmod: rightNow,
             });
         });
 
     articles.push({
-       loc: "/feed.rss"
+       loc: "/feed.xml"
     });
     return articles;
 });

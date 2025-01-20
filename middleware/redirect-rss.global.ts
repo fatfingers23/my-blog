@@ -1,8 +1,8 @@
 export default defineNuxtRouteMiddleware((to) => {
-    if(to.path.toLowerCase() === "/feed.rss"){
+    if(to.path.toLowerCase() === "/feed.xml"){
         return;
     }
     if (to.path.toLowerCase().startsWith("/rss") || to.path.toLowerCase().startsWith("/feed")) {
-        return navigateTo("/feed.rss");
+        return navigateTo("/feed.xml");
     }
 });

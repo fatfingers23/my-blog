@@ -1,11 +1,11 @@
 ---
 title: 'Getting started with Rust 🦀 on the 10¢ microcontroller'
 description: 'Learn how to get started with writing Rust on the ch32v003'
-date: "2025-01-20T23:00:00Z"
-draft: true
+date: "2025-01-22T03:30:00Z"
+draft: false
 image:
     src: "/article-assets/6/cover.jpg"
-    alt: "A bread bored with a small little oled that says Rust on the 10 cent micocontroller"
+    alt: "A bread bored with a small little OLED that says Rust on the 10 cent micocontroller"
 head:
     meta:
       - name: "twitter:card"
@@ -21,7 +21,7 @@ head:
 You may have heard of the "10¢" ch32v003 making waves in the past year. 
 I bought a dev board recently when I found out all you need is the MCU, a couple of capacitors, and you have a cheap device you can write Rust for!
 [This article](https://www.instructables.com/DIY-CH32V003-Development-Board-10-Cent-Devoard-for/) is what really kicked it off for me. 
-When I saw you could easily make your own dev board and hand soldered the MCU pretty easily I was hooked. In this article I want to give you everything you need to know to get started
+When I saw you could easily make your own dev board and hand soldered the MCU pretty easily. I was hooked. In this article I want to give you everything you need to know to get started
 with writing Rust on these little devices.
 
 # Table of Contents
@@ -34,9 +34,17 @@ with writing Rust on these little devices.
 * [Getting started with the ch32-hal](#getting-started-with-ch32-hal)
 * [Unbricking your chip](#unbricking-your-chip)
 * [The good, The Okay, and The 2kb's of SRAM](#the-good-the-okay-and-the-2kbs-of-sram)
+  * [The Good](#the-good)
+  * [The Okay](#the-okay)
+  * [The 2kb's of SRAM](#the-2kbs-of-sram)
+    * [The E-Ink display](#the-e-ink-display)
+    * [The ssd1306 OLED display](#the-ssd1306-oled-display)
+    * [println!("{}", "Too much data)](#println-too-much-data)
 * [Closing notes](#closing-notes)
+
+
 # About the chip
-The ch32v003 is probably the smallest device I've ever written code for, both resource and physical size. Coming in with 16kb of flash, 2kb of ram, and a RISC-V clock of 48Mhz. But don't let
+The ch32v003 is probably the smallest device I've ever written code for, both resource and physical size. Coming in with 16kb of flash, 2kb of ram, and a RISC-V core clock of 48Mhz. But don't let
 the lower specs fool you, this thing can do a lot for it's low price. With it, you have access to UART, I2C, SPI, ADC pins, and [more](https://www.wch-ic.com/products/CH32V003.html)
 ![Infographic of the ch32v003](./article-assets/6/ch32v003-specs.png)
 Although I keep labeling it "The 10 cent microcontroller", I've yet to find any that cheap unless you buy thousands of units.
@@ -45,12 +53,12 @@ This chip comes in 4 different packages. TSSOP20, QFN20, SOP16, and SOP8. All of
 ![img.png](./article-assets/6/ch32v003-packages.png)
 
 # Requirements for Rust 🦀
-Before you start writing Rust on this little device you do need to buy a few different things as well as setup. Before you click
-checkout make sure to read both [Dev board](#dev-board) and [Debugger Module(WCH-LinkE)](#debugger-modulewch-linke) because there are a few gotchas to watch for.
+You do need to buy a few different things and set up your dev environment before you can start writing Rust on this microcontroller. But before you click the 
+checkout button make sure to read both [Dev board](#dev-board) and [Debugger Module(WCH-LinkE)](#debugger-modulewch-linke), there are a few gotchas to watch for.
 
 ## Dev board
-Before I dived into making my own boards with this chip I wanted to order some dev boards to try out the [ch32-hal](https://github.com/ch32-rs/ch32-hal).
-I bought this [dev board from AliExpress ($2.50)](https://www.aliexpress.us/item/3256804778040328.html?spm=a2g0o.order_list.order_list_main.92.5d9e1802ATri3e&gatewayAdapt=glo2usa). So far it's been good! Not used to the double headers for breadboards, but just been plugging jumper wires directly into the headers.
+Before I dive into making my own boards with this chip I wanted to order some dev boards to try out the [ch32-hal](https://github.com/ch32-rs/ch32-hal).
+I bought this [dev board from AliExpress ($2.50)](https://www.aliexpress.us/item/3256804778040328.html?spm=a2g0o.order_list.order_list_main.92.5d9e1802ATri3e&gatewayAdapt=glo2usa). So far it's been good! Not used to the double headers for breadboards, but I have been plugging jumper wires directly into the headers.
 ![img](https://ae-pic-a1.aliexpress-media.com/kf/S0f36267cac61448d8426f48086c7bc8d3.jpg_220x220q75.jpg_.avif)
 I also have the [nanoCh32v003 Dev board($1.50)](https://www.tindie.com/products/johnnywu/nanoch32v003-development-board/) on the way. I'm thinking I am 
 going to like this one a bit better cause of the single row of headers.
@@ -67,7 +75,7 @@ Also, nothing is stopping you from just [building your own](https://www.instruct
 
 ## Debugger Module(WCH-LinkE)
 This chip does require a probe to program it. The ch32v003 does not support USB even though both of the dev boards I listed have USB-C ports. There has been some
-cool projects to add [USB support though](https://www.youtube.com/watch?v=j-QazXghkLY). For this we are going to use the WCH-LinkE. 
+cool projects to add [USB support though](https://www.youtube.com/watch?v=j-QazXghkLY) for compatible boards. But we need a probe,we are going to use the WCH-LinkE. 
 
 ![Wch linl](https://img.wch.cn/20230403/0d0e0935-df8f-46e0-825d-03883fa2e6ff.png)
 
@@ -76,13 +84,13 @@ to update the firmware via the [WCH-LinkUtility](https://www.wch.cn/downloads/wc
 Which you can do by following the directions in [6.2 of the user manual](https://www.wch-ic.com/downloads/WCH-LinkUserManual_PDF.html).
 ![An image showing chapter 6.2 of the user manual](./article-assets/6/wchlink-update.png)
 
-If you do pick up the[nanoch32v003 from tindie](https://www.tindie.com/products/johnnywu/nanoch32v003-development-board/) there is an option to get both
+If you do pick up the [nanoch32v003 from tindie](https://www.tindie.com/products/johnnywu/nanoch32v003-development-board/) there is an option to get both the dev board and a WCHLinkE
 for $6.50.
 
 # Software setup
-As with most of my posts, we are not going to be writing anything groundbreaking. I just want to get you started and give you the tools to make awesome projects. 
+As with most of my posts, we are not going to be writing anything groundbreaking. I just want to get you started and give you the tools to make your own awesome projects. 
 - Install rust using https://www.rust-lang.org/tools/install
-- [wlink](https://github.com/ch32-rs/wlink) a rust CLI for interacting with the WCH-LinkE.
+- [wlink](https://github.com/ch32-rs/wlink), a rust CLI for interacting with the WCH-LinkE.
 - [cargo-generate](https://github.com/ch32-rs/ch32-hal-template) for using the [ch32-hal-template](https://github.com/ch32-rs/ch32-hal-template)
 
 # Setting up the WCH-LinkE
@@ -120,12 +128,12 @@ You can also use some jumper wires to connect them. For what we are using it for
 
 # Getting started with ch32-hal
 I have been using the [ch32-hal](https://github.com/ch32-rs/ch32-hal) and been loving it so far. With it, you have embassy support, 
-embedded-hal traits, and just about anything else you can need. They have done a great job with this crate. 
+embedded-hal traits, and just about anything else you could need. They have done a great job with this crate. 
 
 **Before starting make sure you have set up everything following [Software Setup](#software-setup).**
 
 For starting a new project I just use their [template](https://github.com/ch32-rs/ch32-hal-template) with [cargo-generate](https://github.com/cargo-generate/cargo-generate).
-The command is `cargo generate ch32-rs/ch32-hal-template`. During setup it asks for;
+The command is `cargo generate ch32-rs/ch32-hal-template`. During setup it asks for
    * `Project Name`
    * `Enable embassy (async) support` - recommended to set true for embassy support
    * `Which MCU family to target` - ch32v003
@@ -135,21 +143,22 @@ The command is `cargo generate ch32-rs/ch32-hal-template`. During setup it asks 
      * `ch32v003F4P6` - The TSSOP20 20pin variant with 20pins that have "legs"
      * `ch32v003F4U6` - The QFN20 20pin variant, square with no "legs", just solder pads.
 
-With those options you have a start project to blink a LED! Since every board is a little different the pin that has an LED varies. I used a [continuity test with my multimeter to find mine.](https://www.youtube.com/watch?v=5G622WDZaHg)
+With those options you have a start project to blink a LED! Since every board is a little different the pin the LED is on varies. I used a [continuity test with my multimeter to find mine.](https://www.youtube.com/watch?v=5G622WDZaHg)
 * For the AliExpress board I have it was `PD4`
 * For the `nanoCH32V003` it looks to be `PD6` according to the [schematic](https://github.com/wuxx/nanoCH32V003/blob/master/hardware/nanoCH32V003.pdf)
 
 Then when you run make sure to use `cargo run --release` or your build will fail.
 
 And that's it! With this you can start your ch32v003 adventure and make great projects. Can also find [examples here](https://github.com/ch32-rs/ch32-hal/tree/main/examples/ch32v003) for things like [SPI](https://github.com/ch32-rs/ch32-hal/blob/main/examples/ch32v003/src/bin/spi-lcd-st7735-cube.rs), [ADC](https://github.com/ch32-rs/ch32-hal/blob/main/examples/ch32v003/src/bin/adc.rs), [UART](https://github.com/ch32-rs/ch32-hal/blob/main/examples/ch32v003/src/bin/uart_tx.rs), and more.
+If you are not familiar with embassy and like a bit more help or details then I recommend checking out [this great video by The Rusty Bits on getting started with Embassy](https://www.youtube.com/watch?v=pDd5mXBF4tY)
 
 **If you want to know more about the process of bringing Rust to the ch32v003, you should check out this great series of blog posts. [Rust on the CH32V003](https://noxim.xyz/blog/rust-ch32v003/).**
 
-
 # "Unbricking" your chip
-I'm not sure on how or why it happened. I was assuming originally that I had overridden the function of the debug pin.
-But when I was trying to find the Pin for my LED before using a multimeter.
-I had tried `PA1`, well with that I found that it would panic and give me an era anytime I tried to flash or erase the device.
+
+I'm not sure on how or why it happened. Originally I was assuming that I had overridden the function of the debug pin, now I think it may be an early panic.
+When I was trying to find the Pin for my LED before using a multimeter.
+I had tried `PA1`, well with that I found that it would panic and give me an era anytime I tried to flash or erase the device. Pretty much just "bricking" it from my normal development workflow.
 
 Well thanks to this [video](https://www.youtube.com/watch?v=9UHotTF5jvg) I was able to "unbrick" the chip and get back to coding! 
 You can also use the WCH Link Utility for this. The option you are looking for is of similar text `Clear all code flash - Power off`.
@@ -170,31 +179,30 @@ Before you read the pros and cons, remember. We are talking about a 48Mhz MCU wi
 * Cheap. Even the dev boards are cheap. You do need to buy the WCH-LinkE, but even then I picked mine up for [$5.73 from the official WCH AliExress store](https://www.aliexpress.us/item/3256804695267285.html?spm=a2g0o.order_list.order_list_main.104.21ef1802b7LuIM&gatewayAdapt=glo2usa) and you only need one of those.
 * With the embedded-hal traits and embassy this thing has been very familiar to work with. Worked great with the [ssd1306](https://crates.io/crates/ssd1306) crate I used to put the display into terminal mode.
 * Has the `println!` for easy logging during debugging.
+* Do not have to press any physical buttons, or plug in, unplug the device while flashing code.
 * Has all the major interfaces you would expect in a microcontroller. SPI, I2C, UART, ADC, ability to do PWM, and so on.
-* A small cheap chip that is easy to work with when designing your own PCB. You just need a couple of capacitors to run it.
+* A small cheap chip that is easy to work with when designing your own PCB. You just need a couple of capacitors to get going.
 
 ## The Okay
 I really have not found anything "bad" with the chip itself or the hal. It's all been great, you just have to remember this chip is coined as the "10 cent microcontroller".
-* I have not found a way to write panic messages out yet. I did implement my own [panic_handler](https://doc.rust-lang.org/nomicon/panic-handler.html#panic_handler), but cannot log out the message. Just the error `will not fit in region 'FLASH'`. Which I have ran into a few times in other cases trying to print. I think it is just down to a size limitation.
+* I have not found a way to write panic messages out yet. I did implement my own [panic_handler](https://doc.rust-lang.org/nomicon/panic-handler.html#panic_handler), but cannot log out the message. Just the error `will not fit in region 'FLASH'`. Which I have ran into a few times in other cases trying to print. I think it is just down to a resource limitation.
 
 That's pretty much it. I've loved the hal and the chip so far. I think everyone who has worked on it has done a great job.
 
 ## The 2kb's of sram
-This chip is a powerhouse...for what it is. The only limitations or issue's I've hit so far are that I just have to think a bit smaller.
+This chip is a powerhouse...for what it is. The only limitations or issue's I've hit so far are that I just have to think a bit smaller. I wrote some quick notes on using it so far and the challenges I faced.
 
 ### The E-Ink display
-While testing to write this article I had tried to use an E-Ink display with SPI. I ran into a few issues 
-
-First I could not make a shared BUS in [the usual way I am familiar with](https://github.com/embassy-rs/embassy/blob/main/examples/rp/src/bin/shared_bus.rs). When attempting to pull in some of the dependencies like the [embedded-hal-bus](https://crates.io/crates/embedded-hal-bus) I ran into `compare_exchange requires atomic CAS but not available on this target by default`. 
+While testing to write this article I had tried to use an E-Ink display with SPI. I ran into a few issues. First I could not make a shared BUS in [the usual way I am familiar with](https://github.com/embassy-rs/embassy/blob/main/examples/rp/src/bin/shared_bus.rs). When attempting to pull in some of the dependencies like the [embedded-hal-bus](https://crates.io/crates/embedded-hal-bus) I ran into `compare_exchange requires atomic CAS but not available on this target by default`. 
 Which is a type of error that isn't totally unexpected when using something that is cutting edge in the embedded rust ecosystem.
-In the end I ended up forking the hal and implementing the `SpiDevice` trait which was supported on the crate I was using. that let be get it to build, but still no luck, although I am now wondering if it is not with the framebuffer implementation the crate used. More on that later.
+In the end I ended up forking the ch32-hal and implementing the `SpiDevice` trait which was supported on the crate I was using. That got the project ot build, but still no luck with the display. I decided to move on to a smaller in scope test.
 
-### The ssd1306
+### The ssd1306 OLED display
 I decided to start simpler and use the ssd1306 since it is I2C. Just 2 wires besides GND and POWER. 
 With that I was still having issues when trying to use the embedded-graphics feature. I did find it had a terminal-mode which allowed just writing text and that worked!
-During this time I started to speculate that using a framebuffer embedded-graphics implementation may be a bit too much for this chip. If you are not familiar with framebuffers in the embedded-graphics,
+During this time I started to speculate that using a framebuffer embedded-graphics implementation may be a bit too much for this chip. If you are not familiar with framebuffers in Rust with embedded-graphics,
 the idea is you have a variable in memory that holds an RGB value for every pixel of the screen. Where in Text Mode it is just sending small bits of data a time to the displays to be stored on it's SRAM.
-I did try to write my own implementation to just directly write to the display instead of to a framebuffer then flush to no success. In the end I decided this display did not really fit into my goals with this display,
+With the limited resources of the chip I just don't think it has the ability to hold something as large as a display framebuffer in memory. I did try to write my own implementation to just directly write to the display instead of to a framebuffer then flush to no success. In the end I decided this display did not really fit into the projects I have in mind for this microcontroller,
 and I felt like I had enough to write this article.
 
 
@@ -211,6 +219,6 @@ All in all the ch32v003 is a fun little microcontroller. I don't think this will
 But with the price and ease to add it to a PCB, I think this is a great little chip for your projects. But mostly
 ![Marge Simpson holding a potato saying "I just think they're neat"](https://media1.tenor.com/m/eHIRFWRKeQoAAAAd/marge-i-just-think-theyre-neat.gif)
 
-There's just something really cool about writing code for something smaller than a penny and making your own dev board. 
+There's just something really cool about writing code for something smaller than a penny and making your own dev board by hand. 
 
-I hope you have enjoyed this article and maybe leanred something new. Thanks for reading! 
+I hope you have enjoyed this article and maybe leaned something new. Thanks for reading! 

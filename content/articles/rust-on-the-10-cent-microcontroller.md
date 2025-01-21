@@ -136,9 +136,10 @@ The command is `cargo generate ch32-rs/ch32-hal-template`. During setup it asks 
      * `ch32v003F4U6` - The QFN20 20pin variant, square with no "legs", just solder pads.
 
 With those options you have a start project to blink a LED! Since every board is a little different the pin that has an LED varies. I used a [continuity test with my multimeter to find mine.](https://www.youtube.com/watch?v=5G622WDZaHg)
-Just __DO NOT__ use pins labeled `PD1` or `D1`. [More on that here](#unbricking-your-chip)
 * For the AliExpress board I have it was `PD4`
 * For the `nanoCH32V003` it looks to be `PD6` according to the [schematic](https://github.com/wuxx/nanoCH32V003/blob/master/hardware/nanoCH32V003.pdf)
+
+Then when you run make sure to use `cargo run --release` or your build will fail.
 
 And that's it! With this you can start your ch32v003 adventure and make great projects. Can also find [examples here](https://github.com/ch32-rs/ch32-hal/tree/main/examples/ch32v003) for things like [SPI](https://github.com/ch32-rs/ch32-hal/blob/main/examples/ch32v003/src/bin/spi-lcd-st7735-cube.rs), [ADC](https://github.com/ch32-rs/ch32-hal/blob/main/examples/ch32v003/src/bin/adc.rs), [UART](https://github.com/ch32-rs/ch32-hal/blob/main/examples/ch32v003/src/bin/uart_tx.rs), and more.
 
@@ -146,17 +147,70 @@ And that's it! With this you can start your ch32v003 adventure and make great pr
 
 
 # "Unbricking" your chip
+I'm not sure on how or why it happened. I was assuming originally that I had overridden the function of the debug pin.
+But when I was trying to find the Pin for my LED before using a multimeter.
+I had tried `PA1`, well with that I found that it would panic and give me an era anytime I tried to flash or erase the device.
 
-Talk about how I accidentally "bricked" it with setting PD1 as a gpio.
-Share this video as thanks https://www.youtube.com/watch?v=9UHotTF5jvg 
-and explain how to in the WCH Utility
+Well thanks to this [video](https://www.youtube.com/watch?v=9UHotTF5jvg) I was able to "unbrick" the chip and get back to coding! 
+You can also use the WCH Link Utility for this. The option you are looking for is of similar text `Clear all code flash - Power off`.
+
+As I was writing this article and testing I also found that you can erase and get back with wlink using
+`wlink erase --method power-off --chip CH32V003`, after that you are good to `cargo run --release` and get back to coding! 
 
 
 # The good, The Okay, and The 2kb's of SRAM
 
-talk about how i've enjoyed it and issues with SPI not working and how i dont think framebuffer embddedd graphic implementations will not work
-TLDR great device, does a lot, but don't forget what it is
+So far I have had a lot of fun and been very impressed by this little chip. I've mostly just been doing some proof of concepts like this DVD loading screen
+on a 128x64 ssd1306 OLED screen. But in the future I have plans for a devboard, E-ink badge, and possibly a cheap 3d printed robot. 
+![An oled screen showing the text DVD bouncing from corner to corner](./article-assets/6/dvd_logo.gif)
+
+Before you read the pros and cons, remember. We are talking about a 48Mhz MCU with 2kb of ram and a 16kb flash that is running Rust.
+
+## The Good
+* Cheap. Even the dev boards are cheap. You do need to buy the WCH-LinkE, but even then I picked mine up for [$5.73 from the official WCH AliExress store](https://www.aliexpress.us/item/3256804695267285.html?spm=a2g0o.order_list.order_list_main.104.21ef1802b7LuIM&gatewayAdapt=glo2usa) and you only need one of those.
+* With the embedded-hal traits and embassy this thing has been very familiar to work with. Worked great with the [ssd1306](https://crates.io/crates/ssd1306) crate I used to put the display into terminal mode.
+* Has the `println!` for easy logging during debugging.
+* Has all the major interfaces you would expect in a microcontroller. SPI, I2C, UART, ADC, ability to do PWM, and so on.
+* A small cheap chip that is easy to work with when designing your own PCB. You just need a couple of capacitors to run it.
+
+## The Okay
+I really have not found anything "bad" with the chip itself or the hal. It's all been great, you just have to remember this chip is coined as the "10 cent microcontroller".
+* I have not found a way to write panic messages out yet. I did implement my own [panic_handler](https://doc.rust-lang.org/nomicon/panic-handler.html#panic_handler), but cannot log out the message. Just the error `will not fit in region 'FLASH'`. Which I have ran into a few times in other cases trying to print. I think it is just down to a size limitation.
+
+That's pretty much it. I've loved the hal and the chip so far. I think everyone who has worked on it has done a great job.
+
+## The 2kb's of sram
+This chip is a powerhouse...for what it is. The only limitations or issue's I've hit so far are that I just have to think a bit smaller.
+
+### The E-Ink display
+While testing to write this article I had tried to use an E-Ink display with SPI. I ran into a few issues 
+
+First I could not make a shared BUS in [the usual way I am familiar with](https://github.com/embassy-rs/embassy/blob/main/examples/rp/src/bin/shared_bus.rs). When attempting to pull in some of the dependencies like the [embedded-hal-bus](https://crates.io/crates/embedded-hal-bus) I ran into `compare_exchange requires atomic CAS but not available on this target by default`. 
+Which is a type of error that isn't totally unexpected when using something that is cutting edge in the embedded rust ecosystem.
+In the end I ended up forking the hal and implementing the `SpiDevice` trait which was supported on the crate I was using. that let be get it to build, but still no luck, although I am now wondering if it is not with the framebuffer implementation the crate used. More on that later.
+
+### The ssd1306
+I decided to start simpler and use the ssd1306 since it is I2C. Just 2 wires besides GND and POWER. 
+With that I was still having issues when trying to use the embedded-graphics feature. I did find it had a terminal-mode which allowed just writing text and that worked!
+During this time I started to speculate that using a framebuffer embedded-graphics implementation may be a bit too much for this chip. If you are not familiar with framebuffers in the embedded-graphics,
+the idea is you have a variable in memory that holds an RGB value for every pixel of the screen. Where in Text Mode it is just sending small bits of data a time to the displays to be stored on it's SRAM.
+I did try to write my own implementation to just directly write to the display instead of to a framebuffer then flush to no success. In the end I decided this display did not really fit into my goals with this display,
+and I felt like I had enough to write this article.
+
+
+### println!("{}", "Too much data")
+I talked a bit in [The Okay](#the-okay) about running into errors with trying to println panic messages. I have found you have to be careful with
+what you are printing, because I think you can pretty quickly build a binary that will be too large for the flash of the device.
+
+Like I said before. I feel like any of the issues I've had with this chip is due to the fact that it's just smaller than anything I've written for before.
+So as you use it. Just keep in mind what this device truly is, a 10 cent microcontroller.
 
 # Closing Notes
 
+All in all the ch32v003 is a fun little microcontroller. I don't think this will replace a lot of my use cases where I use the RP2040. 
+But with the price and ease to add it to a PCB, I think this is a great little chip for your projects. But mostly
+![Marge Simpson holding a potato saying "I just think they're neat"](https://media1.tenor.com/m/eHIRFWRKeQoAAAAd/marge-i-just-think-theyre-neat.gif)
 
+There's just something really cool about writing code for something smaller than a penny and making your own dev board. 
+
+I hope you have enjoyed this article and maybe leanred something new. Thanks for reading! 

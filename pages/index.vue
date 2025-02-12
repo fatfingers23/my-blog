@@ -31,11 +31,11 @@ onMounted(() => {
         class="hero-content flex-col"
       >
         <div class="text-center lg:text-start">
-          <h1 class="font-poppins text-3xl font-black uppercase md:text-7xl">
-            Hey, i'm Bailey or FatFingers 👋
+          <h1 class="font-poppins text-3xl font-black uppercase md:text-5xl">
+            Hey, i'm Bailey 👋
           </h1>
           <p class="py-6 font-poppins text-left">
-            Sometimes serious, sometimes not. In my day job, I'm a team lead and full stack developer for a dotnet web application. In my free time, I follow whatever interests me. Be it retro gaming, retro console modding, microcontrollers, or anything else. Usually, it changes from week to week. I plan on covering my current hyperfixation here.
+            Sometimes serious, sometimes not. In my day job, I'm a team lead a dotnet web application. In my free time, I follow whatever interests me. Be it retro gaming, retro console modding, microcontrollers, or anything else. Mostly will be talking about embedded development here, but can be a bit of anything.
           </p>
           <div class="flex gap-2 max-lg:justify-center justify-center">
             <a

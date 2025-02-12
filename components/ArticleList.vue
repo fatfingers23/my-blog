@@ -24,7 +24,12 @@ const whereQuery = import.meta.dev ? null : [{draft: false}];
           </figure>
           <div class="card-body">
             <h2 class="card-title">
-              {{ article.title }}
+              <NuxtLink
+                :to="article._path"
+                class="link">
+                {{ article.title }}
+              </NuxtLink>
+
             </h2>
             <p>{{ article.description }}</p>
             <div class="card-actions justify-between">

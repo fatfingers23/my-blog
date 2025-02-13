@@ -1,4 +1,4 @@
-import { asSitemapCollection } from "@nuxtjs/sitemap/content";
+import {asSitemapCollection} from "@nuxtjs/sitemap/content";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     site: {
@@ -13,12 +13,11 @@ export default defineNuxtConfig({
     },
     modules: [
         "@nuxtjs/sitemap",
-
         "@nuxt/content",
-      "@nuxtjs/tailwindcss",
-      "@nuxt/image",
-      "@nuxt/eslint",
-      "@nuxthq/studio",
+        "@nuxtjs/tailwindcss",
+        "@nuxt/image",
+        "@nuxt/eslint",
+        "@nuxthq/studio",
     ],
 
     components: {
@@ -64,7 +63,12 @@ export default defineNuxtConfig({
     },
     routeRules: {
         // this page is generated at build time and cached permanently
-        "/articles/**": {prerender: true},
+        "/articles/pico-sapien": {prerender: true},
+        "/articles/getting-started-with-rust-an-rp2040": {prerender: true},
+        "/articles/pico-w-webserver-with-rust": {prerender: true},
+        "/articles/missed-fundamentals": {prerender: true},
+        "/articles/rust-on-the-10-cent-microcontroller": {prerender: true},
+        "/articles/poststation-on-the-rp2350": {prerender: true},
         "/feed.xml": {prerender: true},
     },
 });

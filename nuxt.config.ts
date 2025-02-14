@@ -41,7 +41,8 @@ export default defineNuxtConfig({
                 "mdc",
                 "md",
                 "yaml",
-                "rust"
+                "rust",
+                "toml"
             ],
             theme: {
                 // Default theme (same as single string)
@@ -63,6 +64,7 @@ export default defineNuxtConfig({
     },
     routeRules: {
         // this page is generated at build time and cached permanently
+        "/": {prerender: true},
         "/articles/pico-sapien": {prerender: true},
         "/articles/getting-started-with-rust-an-rp2040": {prerender: true},
         "/articles/pico-w-webserver-with-rust": {prerender: true},

@@ -44,6 +44,9 @@ to a Pico 2 displaying the usage on a SSD1306 OLED screen.
   * [Firmware Crate](#firmware-crate)
   * [Host Crate](#host-crate)
 * [Who said you could only use Rust?](#who-said-you-could-only-use-rust)
+  * [postcard-rpc TCP endpoint](#postcard-rpc-tcp-endpoint)
+  * [JSON rest API](#json-rest-api)
+  * [Types all the way down](#types-all-the-way-down)
   
 
 # postcard, postcard-rpc, and Poststation
@@ -81,9 +84,9 @@ Some of the features are:
 * A section to see the logs from your device
 * [Endpoints](https://docs.rs/postcard-rpc/latest/postcard_rpc/#endpoints) section to see the postcard-rpc endpoints (Works similar to url routes). Can view the request and response types here as well
 * [Topics](https://docs.rs/postcard-rpc/latest/postcard_rpc/#topics) are similar to Endpoints but do not expect a response, can also see the request types here
-* History and tracing to help troubleshoot
-* And all of this is accessible via a web api as well! Can use the [poststation-cli](https://crates.io/crates/poststation-cli) to try it out.
-* You also use Poststation's api as how you communicate to the microcontroller from  your Host application, and vice versa. It handles those communications and gives you an easy to use REST api. In this project that is done with the [poststation-sdk](https://crates.io/crates/poststation-sdk) 
+* History and tracing to help troubleshoot 
+* Exposes a postcard-rpc TCP service endpoint that allows you to also query all of this by using the [poststation-cli](https://crates.io/crates/poststation-cli) or with [poststation-sdk](https://crates.io/crates/poststation-sdk) for your Rust projects. I will talk a bit more about this in [postcard-rpc TCP endpoint](#postcard-rpc-tcp-endpoint)
+* And all of this and the ability to send requests to your microcontroller is accessible via a JSON REST api as well turned on by a change in the [Poststation config file](https://onevariable.com/poststation-book/configuration.html#the-apishttp-section)
 
 There's a lot more to Poststation, but that's the general introduction for what we need to know for the purpose of this post.
 To learn more check out these links:
@@ -352,8 +355,12 @@ The [`shared_bus.rs`](https://github.com/embassy-rs/embassy/blob/main/examples/r
 
 ## Host Crate
 The [host](https://github.com/fatfingers23/pico-pc-performance-monitor/blob/main/host/src/main.rs) program is a simple [Tokio](https://tokio.rs/tokio/tutorial/hello-tokio) program that runs in the terminal and gets the computer resource usage via the [sysinfo crate](https://crates.io/crates/sysinfo).
-When started it makes an API call to Poststation with the [poststation-sdk](https://crates.io/crates/poststation-sdk) to get a list of devices, then since we know we only have one connected it grabs the first connected device.
-Then it's sent to Poststation using the SDK. The order of opertations then is:
+
+The order of operations then is:
+* When started we connect to the postcard-rpc endpoint that is running at `localhost:51837` using the [poststation-sdk](https://crates.io/crates/poststation-sdk). It's important to note that this is not the endpoint for the REST API.
+This is a port running a postcard-rpc service  that uses those standards and postcard to communicate. 
+* We then make a call with the sdk to get a  list of devices, then since we know we only have one connected it grabs the first connected device.
+Then it's sent to Poststation using the SDK.
 * Poststation sends the request by USB to the Pico where the [`set_screen_text`](https://github.com/fatfingers23/pico-pc-performance-monitor/blob/c6c558b236677c2c7b1604556815e60ee564da6a/firmware/src/handlers.rs#L54) handler is called 
 * We set the `SetDisplayEndpoint` Endpoint to use the `set_screen_text` handler in  [`app.rs`](https://github.com/fatfingers23/pico-pc-performance-monitor/blob/c6c558b236677c2c7b1604556815e60ee564da6a/firmware/src/app.rs#L129)  
 * We know the Endpoint because we set it in the [icd crate](https://github.com/fatfingers23/pico-pc-performance-monitor/blob/c6c558b236677c2c7b1604556815e60ee564da6a/icd/src/lib.rs#L47) along with the Request type of `SysInfo<'a>`
@@ -427,28 +434,60 @@ loop {
 
 ```
 
-### Who said you could only use Rust?
-So far we have only used Rust to call the api, either by the [opensource cli or sdk](https://github.com/OneVariable/poststation-util), but all those tools do is call a rest API. You can just do that via something like curl or another library that hanldes web requests.
+# Who said you could only use Rust?
 
-By default, Poststation uses a self-signed certificate that can be found via the `poststation-cli folder` command, it's important to note that Poststation will not accept any requests unless you use the SSL with the request, like the `--cacert` flag for curl.
+## postcard-rpc TCP endpoint
+I have talked a bit about the postcard-rpc service endpoint running at `localhost:51837`. I wanted to go into more detail. This is an endpoint that Poststation provides for us.
+That endpoint is part of Poststation and because of that it is closed source. But postcard-rpc is open source and so is the SDK so we can look at how those work to get an idea of how it may work.
+
+When we use poststation-sdk it is actually creating a TCP connection to Poststation and using the postcard-rpc wire protocol to send back and forth via messages serialized with postcard.
+This is done on the server by implementing a [postcard-rpc server](https://docs.rs/postcard-rpc/latest/postcard_rpc/server/index.html) presumably. 
+
+Since the sdk is open source you can [see here](https://github.com/OneVariable/poststation-util/blob/de27d7f8e9d097a67ad06d971ff3e1c5c141f3e6/tools/poststation-sdk/src/lib.rs#L667-L921) that a [HostClient](https://docs.rs/postcard-rpc/latest/postcard_rpc/host_client/struct.HostClient.html) with a TCP socket to handle the communications between
+Poststation and your project.
 
 
-TODO go back and re write this since it works now
+This is one of the perks of Poststation, we don't have to worry about any of this. It's taken care of for us and we have easy to use APIs to communicate to and from our microcontrollers in a well optimized way with the postcard ecosystem.
 
+## JSON Rest API
+By default, the JSON Rest api is turned off. But you can turn it on by making a change to the [Poststation config file](https://onevariable.com/poststation-book/configuration.html) found via the
+the `poststation-cli folder` command.
 
-I did not have success with using this with curl. I'm assuming it may be something on my end since the poststation-sdk works with no issue. Because of this, I went another route. The `poststation-cli` folder command also gives the location for the `poststation-config.toml` file which we can use to change the behavior of the api. Inside the file you want to uncomment the below section. Then just simply restart Poststation 
+To allow the api running on port 4444 you just need to uncomment `[apis.http]` and restart Poststation. 
+Your config should look something like this
 ```toml
+....
+
+# # `apis.http`
+#
+# This section is used for the REST API. This section is optional,
+# and when omitted the REST API is disabled.
+#
+# When `insecure` security is selected, only `local-only` mode
+# is allowed.
 [apis.http]
 # ## REST API Security options - pick ONE:
 
 # Insecure, no encryption, only local connections will be allowed
-security = "insecure"
- ```
+# security = "insecure"
 
-I do have plans to write a Javascript/Typescript SDK that will be able to connect with the CA cert, more on that in a bit. For now, we are going to just use http and curl. That request would look something like this.
+# Self-signed CA certificate. Global connections will be allowed, clients
+#   on other machines will need a copy of the generated CA Certificate
+#
+# This is the default and recommended option.
+# security = "tls-self-signed"
+
+# ## Listener options
+# listener.local-only = { port = 4444 } # default
+# listener.global     = { socket_addr = "0.0.0.0:1235" }
+
+....
+```
+
+Poststation by default serves this API with a self-signed SSL cert so if you want to use the cert in your curl command would look something like below.
+You can get your `--cacert` location from the `poststation-cli folder` command.
 ```bash
-curl "http://localhost:4444/api/devices" -q -H "Accept: application/json" | jq
-
+curl --cacert "/home/baileytownsend/.local/share/poststation/ca-cert.pem" "https://127.0.0.1:4444/api/devices" -q -H "Accept: application/json"
 [
   {
     "serial": "000000000000007B",
@@ -457,10 +496,30 @@ curl "http://localhost:4444/api/devices" -q -H "Accept: application/json" | jq
     "manufacturer": "Sunny Brooke Development",
     "product": "rusty-presto-2350"
   },
-....
-````
+
+
+```
+or you can just ignore the self signed cert completely with the `-k` option.
+```bash
+curl "https://127.0.0.1:4444/api/devices" -k -q -H "Accept: application/json" | jq
+
+```
+
+You also have the option to turn off SSL completely with setting the `security = "insecure"` in the Poststation config.
+
+```toml
+[apis.http]
+# ## REST API Security options - pick ONE:
+
+# Insecure, no encryption, only local connections will be allowed
+security = "insecure"
+ ```
+
+With the REST API on Poststation you are able to use what ever programming language you'd like. Sending a message to and from your Microcontroller is now one web request away!
+
 
 If you are curious what the rest of the endpoints are, you can view them in the [poststation-util repo](https://github.com/OneVariable/poststation-util/blob/main/crates/poststation-api-icd/src/rest.rs)
+## Types all the way down
 
 Since I am a web developer as I have been using Poststation I keep thinking about ideas where I could make a web dashboard with stats from a Pico. During that time I started thinking too about how nice it would be to have the same types all the way through.
 That's when I found [ts-rs](https://docs.rs/ts-rs/latest/ts_rs/) which allows you to export your Rust structs to TypeScript types.
@@ -469,8 +528,7 @@ That's when I found [ts-rs](https://docs.rs/ts-rs/latest/ts_rs/) which allows yo
 I have plans to write a library in TypeScript along with an example project that will allow you to call the Poststation API securely with strong types. So then you will be able to have the same exact data types on your Hardware when you write Rust there, as you will have on the Website that calls the Microcontroller!
 I want to make it as simple as possible for newcomers to the embedded world to be able to use the tools they are used to and make amazing projects with them! 
 
-
-### Closing Remarks and Special Thanks
+# Closing Remarks and Special Thanks
 I've just scratched the surface of Poststation in this blog post. I did not cover how it lets your Host do complicated things that are usually hard on Microcontrollers like web calls, or like generating images to be displayed on a e-ink screen. Didn't even talk about how you can use a Host as a way to pass messages onto other Microcontrollers or just have many connected to it as once.
 But I will save that for another day or for you to find out on your own! 
 
@@ -478,6 +536,6 @@ That's pretty much it! So far I have loved Poststation, between the ease of comm
 this is just a hobby for you. It's been well worth it for me to just be able to focus on writing the project I want to write.
 
 Thank you for making it this far and I hope you have learned something new! Also, special thanks to [James Munns](https://github.com/jamesmunns) the creator of the postcard ecosystem and Poststation for an early trial license key and being such a big help with any questions I had.
-I know this may sound like a paid for review, but this has just been a product I have really enjoyed working with and wanted to share with everyone. I can't recommend it enough, I even bought a license, so I can continue using it once the trial is up. 
+__I know this may sound like a paid for review, but it's not.__ This has just been a product I have really enjoyed working with and wanted to share with everyone. I can't recommend it enough, I even bought a license, so I can continue using it once the trial is up. Thanks again for reading! 
 
 Don't forget you can just [download](https://poststation.rs/download/) and try it out today without even buying a license.

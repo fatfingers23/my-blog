@@ -1,8 +1,8 @@
 ---
 title: 'Getting started with Poststation on the RP2350'
 description: 'Use Rust 🦀 to build a small little display to show your computer resource usage'
-date: "2025-02-14T16:00:00Z"
-draft: true
+date: "2025-02-14T22:00:00Z"
+draft: false
 image:
     src: "/article-assets/7/cover.webp"
     alt: "Picture of 3D printed case for a SSD1306 OLED with the screen in it showing the Poststation logo in blue. Beside it is a Pico 2 "
@@ -86,7 +86,7 @@ Some of the features are:
 * [Topics](https://docs.rs/postcard-rpc/latest/postcard_rpc/#topics) are similar to Endpoints but do not expect a response, can also see the request types here
 * History and tracing to help troubleshoot 
 * Exposes a postcard-rpc TCP service endpoint that allows you to also query all of this by using the [poststation-cli](https://crates.io/crates/poststation-cli) or with [poststation-sdk](https://crates.io/crates/poststation-sdk) for your Rust projects. I will talk a bit more about this in [postcard-rpc TCP endpoint](#postcard-rpc-tcp-endpoint)
-* And all of this and the ability to send requests to your microcontroller is accessible via a JSON REST api as well turned on by a change in the [Poststation config file](https://onevariable.com/poststation-book/configuration.html#the-apishttp-section)
+* A JSON REST api that gives you all the same access as the sdk from a web call.
 
 There's a lot more to Poststation, but that's the general introduction for what we need to know for the purpose of this post.
 To learn more check out these links:
@@ -358,7 +358,7 @@ The [host](https://github.com/fatfingers23/pico-pc-performance-monitor/blob/main
 
 The order of operations then is:
 * When started we connect to the postcard-rpc endpoint that is running at `localhost:51837` using the [poststation-sdk](https://crates.io/crates/poststation-sdk). It's important to note that this is not the endpoint for the REST API.
-This is a port running a postcard-rpc service  that uses those standards and postcard to communicate. 
+This is a port running a postcard-rpc service hosted by Poststation that uses postcard-rpc wire protocol and postcard to communicate back and forth. 
 * We then make a call with the sdk to get a  list of devices, then since we know we only have one connected it grabs the first connected device.
 Then it's sent to Poststation using the SDK.
 * Poststation sends the request by USB to the Pico where the [`set_screen_text`](https://github.com/fatfingers23/pico-pc-performance-monitor/blob/c6c558b236677c2c7b1604556815e60ee564da6a/firmware/src/handlers.rs#L54) handler is called 
@@ -536,6 +536,6 @@ That's pretty much it! So far I have loved Poststation, between the ease of comm
 this is just a hobby for you. It's been well worth it for me to just be able to focus on writing the project I want to write.
 
 Thank you for making it this far and I hope you have learned something new! Also, special thanks to [James Munns](https://github.com/jamesmunns) the creator of the postcard ecosystem and Poststation for an early trial license key and being such a big help with any questions I had.
-__I know this may sound like a paid for review, but it's not.__ This has just been a product I have really enjoyed working with and wanted to share with everyone. I can't recommend it enough, I even bought a license, so I can continue using it once the trial is up. Thanks again for reading! 
+__I know this may sound like a paid for review, but it's not.__ I have enjoyed working with Poststation and wanted to share that with everyone. I can't recommend it enough, I even bought a license, so I can continue using it once the trial is up. Thanks again for reading! 
 
 Don't forget you can just [download](https://poststation.rs/download/) and try it out today without even buying a license.

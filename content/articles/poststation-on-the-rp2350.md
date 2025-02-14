@@ -13,7 +13,7 @@ head:
       - name: "twitter:image"
         content: "https://baileytownsend.dev/article-assets/7/cover.webp"
       - name: "keywords"    
-        content: "Rust,Pico,RP2350,embassy-rs,Postcard,Poststation"
+        content: "Rust,Pico,RP2350,embassy-rs,postcard,Poststation"
       - name: 'author'
         content: 'Bailey Townsend'
 ---
@@ -31,9 +31,9 @@ to a Pico 2 displaying the usage on a SSD1306 OLED screen.
 
 
 # Table of Contents
- * [Postcard, Postcard-rpc, and Poststation](#postcard-postcard-rpc-and-poststation)
-   * [Postcard](#postcard)
-   * [Postcard-rpc](#postcard-rpc)
+ * [postcard, postcard-rpc, and Poststation](#postcard-postcard-rpc-and-poststation)
+   * [postcard](#postcard)
+   * [postcard-rpc](#postcard-rpc)
    * [Poststation](#poststation)
 * [Requirements](#requirements)
   * [Software](#software)
@@ -46,29 +46,29 @@ to a Pico 2 displaying the usage on a SSD1306 OLED screen.
 * [Who said you could only use Rust?](#who-said-you-could-only-use-rust)
   
 
-# Postcard, Postcard-rpc, and Poststation
-Before we get started I wanted to break down some of the different components that make up the Postcard ecosystem. You can also check out [this excellent explanation](https://onevariable.com/poststation-book/family.html)
-that goes into more detail. In my day job, I'm a web developer, so I'll try to use web development terminology to draw parallels between the different Postcard projects and what it would be like in the web world.
+# postcard, postcard-rpc, and Poststation
+Before we get started I wanted to break down some of the different components that make up the postcard ecosystem. You can also check out [this excellent explanation](https://onevariable.com/poststation-book/family.html)
+that goes into more detail. In my day job, I'm a web developer, so I'll try to use web development terminology to draw parallels between the different postcard projects and what it would be like in the web world.
 
-## [Postcard](https://docs.rs/Postcard/latest/Postcard/)
-From the projects [README](https://github.com/jamesmunns/Postcard)
-> Postcard is a #![no_std] focused serializer and deserializer for Serde.
+## [postcard](https://docs.rs/postcard/latest/postcard/)
+From the projects [README](https://github.com/jamesmunns/postcard)
+> postcard is a #![no_std] focused serializer and deserializer for Serde.
 
-Postcard is the underlying data structure. Think of it kind of like JSON or XML, but optimized to be easy to serialize and deserialize on embedded devices where resources can be limited.
-If you're curious about more of how it works then I recommend checking out [The Postcard Wire Specification](https://postcard.jamesmunns.com/intro). 
+postcard is the underlying data structure. Think of it kind of like JSON or XML, but optimized to be easy to serialize and deserialize on embedded devices where resources can be limited.
+If you're curious about more of how it works then I recommend checking out [The postcard Wire Specification](https://postcard.jamesmunns.com/intro). 
 But for this blog post to keep it simple just know that this is the specification of how the data that is sent between the microcontroller and our Host application.
 
-## Postcard-rpc
+## postcard-rpc
 From the projects [README](https://github.com/jamesmunns/postcard-rpc)
 > A host (PC) and client (MCU) library for handling RPC-style request-response types.
 
-To keep to a web analogy where Postcard is JSON or XML, Postcard-rpc is the web server, as well has the web framework.
-Postcard-rpc gives you everything you need to set up communications between the Host and the microcontroller. Like handling the transporting of the data via USB, TCP, I2C, UART, etc.
-As well as giving you the framework to build handlers on both the microcontroller and the host to receive and send requests that are serialized with Postcard.
-The graphic on [Postcard-rpc's doc.rs page](https://docs.rs/postcard-rpc/latest/postcard_rpc/) does a great job of showing how it all works together.
+To keep to a web analogy where postcard is JSON or XML, postcard-rpc is the web server, as well as the web framework.
+postcard-rpc gives you everything you need to set up communications between the Host and the microcontroller. Like handling the transporting of the data via USB, TCP, I2C, UART, etc.
+As well as giving you the framework to build handlers on both the microcontroller and the host to receive and send requests that are serialized with postcard.
+The graphic on [postcard-rpc's doc.rs page](https://docs.rs/postcard-rpc/latest/postcard_rpc/) does a great job of showing how it all works together.
 
 ## Poststation
-Poststation takes care of the host side of Postcard-rpc and just lets you focus on just writing the logic you need for your project.
+Poststation takes care of the host side of postcard-rpc and just lets you focus on just writing the logic you need for your project.
 No need to worry about how to send data back and forth, how to handle multiple devices, connects/disconnect, It all Just Works™.
 
 
@@ -100,14 +100,14 @@ a limited trial and be able to follow along with this post. I can't recommend bu
 -  [Rust](https://www.rust-lang.org/tools/install)
 - [Picotool](https://github.com/raspberrypi/pico-sdk-tools/releases/tag/v2.1.0-0) - to flash the firmware (Make sure the Pico tool binary is in your path)
   - If you have any issues can also use [elf2uf2-rs](https://crates.io/crates/elf2uf2-rs)
-- [Poststation](https://poststation.rs/download/) -For more details on how to install, [can follow this page](https://onevariable.com/poststation-book/installation-poststation.html)
-- [poststation-cli](https://crates.io/crates/poststation-cli) - We use this in a script for resetting to BOOTSEL to flash firmware changes. For more details on how to install, [can follow this page](https://onevariable.com/poststation-book/installation-utils.html)
+- [Poststation](https://poststation.rs/download/) - For more details on how to install, you can follow the instructions on [this page](https://onevariable.com/poststation-book/installation-poststation.html)
+- [poststation-cli](https://crates.io/crates/poststation-cli) - We use this in a script for resetting to the bootloader to flash firmware changes. For more details on how to install, you can follow the instructions on [this page](https://onevariable.com/poststation-book/installation-utils.html)
 - [Projects Repo](https://github.com/fatfingers23/pico-pc-performance-monitor) - This is the finished repo for the project
 
 ## Hardware
 Poststation works with a lot of Microcontrollers, but for this post we are using the RP2350.
 - A Pico 2, or any other RP2350 device
-  - This can also work with the Pico/RP2040 with a few changes, I may release another branch with this (especially if someone let me know they would like that example)
+  - This can also work with the Pico/RP2040 with a few changes, I may release another branch with this (especially if someone lets me know they would like that example)
 - A SSD1306 OLED display. These are the cheap little I2c displays you can find on various online retailers. In this project we are using the 128x64 variant 
 - Optional, but I found this cute little [3D printed case](https://makerworld.com/en/models/817832#profileId-760400) that looks like a TV. 
 
@@ -133,7 +133,7 @@ To flash for the first time:
 6.  You should now see a screen displaying the Poststation logo waiting on a connection from the host
 
 To run the Host program
-1. Make sure Poststation is running, or you can make a copy of [`.env.example`](https://github.com/fatfingers23/pico-pc-performance-monitor/blob/main/host/.env.example), rename to `.env` and set the `POSTSTATION_LOCATION` variable to your poststation binary location. Mileage may vary on this feature, make sure to check the logs if you have issues
+1. Make sure Poststation is running, or you can make a copy of [`.env.example`](https://github.com/fatfingers23/pico-pc-performance-monitor/blob/main/host/.env.example), rename to `.env` and set the `POSTSTATION_LOCATION` variable to your Poststation binary location. Mileage may vary on this feature, make sure to check the logs if you have issues
 2. Then just run `cargo run` in side of the `host` folder
 
 That should be it! You should now see your computer usage on the device
@@ -153,7 +153,7 @@ A quick order of operations to show how everything Interacts
 5. Poststation then does it's magic and routes that to the device via it's serial number
 6. On the Pico a postcard-rpc handler runs and displays the usage on the display
 
-The only code you have to write was 2,3,and 5. Just the bare minimal to pick a device and then the logic for getting the usage from the computer, then displaying it on the Pico.
+The only code you have to write was 2,3,and 5. Just the bare minimum to pick a device and then the logic for getting the usage from the computer, then displaying it on the Pico.
 That's the power of Poststation, it lets you focus just on the code you need to write for your project, Don't worry about any of the communications between the devices . It Just Works™.
 
 To start a new project you can also copy the template and start from there. [That is found here](https://github.com/OneVariable/poststation-util/tree/main/templates)
@@ -161,7 +161,7 @@ To start a new project you can also copy the template and start from there. [Tha
 To go a bit deeper I am going to break down each of the crates in this project and their role
 
 ## icd Crate
-The [icd crate](https://github.com/fatfingers23/pico-pc-performance-monitor/blob/main/icd/src/lib.rs) is shared between the firmware and host crate. This is one of the points where the Postcard ecosystem shines in my opinion. Because of this crate
+The [icd crate](https://github.com/fatfingers23/pico-pc-performance-monitor/blob/main/icd/src/lib.rs) is shared between the firmware and host crate. This is one of the points where the postcard ecosystem shines in my opinion. Because of this crate
 you can share models and endpoints between the two, you have the same types in all your projects!
 
 For example the struct we use to send the usage is this 
@@ -179,7 +179,7 @@ pub struct SysInfo<'a> {
 
 Since this is in the icd crate it's the same data type you send from the Host as you receive on the firmware
 
-This also holds the definitions for Postcard-rpc's endpoints and topics that are defined in macros and styled with a Markdown table like syntax. If you wanted to see what it was like to add a new one can check [this commit](https://github.com/fatfingers23/pico-pc-performance-monitor/commit/c6c558b236677c2c7b1604556815e60ee564da6a#diff-9287339c0ff308b980d5d4ab4113eb37b405d9414df380f9320facacfa56a8a1R47)
+This also holds the definitions for postcard-rpc's endpoints and topics that are defined in macros and styled with a Markdown table like syntax. If you wanted to see what it was like to add a new one can check [this commit](https://github.com/fatfingers23/pico-pc-performance-monitor/commit/c6c558b236677c2c7b1604556815e60ee564da6a#diff-9287339c0ff308b980d5d4ab4113eb37b405d9414df380f9320facacfa56a8a1R47)
 ```rust 
 // Endpoints spoken by our device
 //
@@ -193,7 +193,7 @@ endpoints! {
     | SleepEndpoint             | SleepMillis   | SleptMillis           | "template/sleep"              |
     | SetLedEndpoint            | LedState      | ()                    | "template/led/set"            |
     | GetLedEndpoint            | ()            | LedState              | "template/led/get"            |
-    | SetDisplayEndpoint        | SysInfo<'a>       | ()                | "template/display/set"        |
+    | SetDisplayEndpoint        | SysInfo<'a>   | ()                    | "template/display/set"        |
 }
 
 // incoming topics handled by our device
@@ -238,8 +238,8 @@ pub struct Context {
 }
 ```
 
-The rest is set up for Postcard-rpc. All of this is usually the same as the template expect we do defined what handler is called when an endpoint is called.
-This of this as a web router defining which web controller(handler) to call. Since we are using embassy and the async version of the ssd1306 crate we use the `aync` kind for `SetDisplayEndPoint` 
+The rest is set up for postcard-rpc. All of this is usually the same as the template except we do defined what handler is called when an endpoint is called.
+Think of this as a web router defining which web controller(handler) to call. Since we are using embassy and the async version of the ssd1306 crate we use the `aync` kind for `SetDisplayEndPoint` 
 ```rust
 endpoints: {
     // This list comes from our ICD crate. All of the endpoint handlers we
@@ -364,7 +364,7 @@ let client = match connect("localhost:51837").await {
     Err(e) => {
         error!("{:?}", e);
         return Err(
-            "Error connecting to poststation, please make sure it is running".to_string(),
+            "Error connecting to oststation, please make sure it is running".to_string(),
         );
     }
 };
@@ -432,6 +432,10 @@ So far we have only used Rust to call the api, either by the [opensource cli or 
 
 By default, Poststation uses a self-signed certificate that can be found via the `poststation-cli folder` command, it's important to note that Poststation will not accept any requests unless you use the SSL with the request, like the `--cacert` flag for curl.
 
+
+TODO go back and re write this since it works now
+
+
 I did not have success with using this with curl. I'm assuming it may be something on my end since the poststation-sdk works with no issue. Because of this, I went another route. The `poststation-cli` folder command also gives the location for the `poststation-config.toml` file which we can use to change the behavior of the api. Inside the file you want to uncomment the below section. Then just simply restart Poststation 
 ```toml
 [apis.http]
@@ -473,7 +477,7 @@ But I will save that for another day or for you to find out on your own!
 That's pretty much it! So far I have loved Poststation, between the ease of communications between devices, the excellent templates for writing your project. I think this is well worth buying and using, even if 
 this is just a hobby for you. It's been well worth it for me to just be able to focus on writing the project I want to write.
 
-Thank you for making it this far and I hope you have learned something new! Also, special thanks to [James Munns](https://github.com/jamesmunns) the creator of the Postcard ecosystem and Poststation for an early trial license key and being such a big help with any questions I had.
+Thank you for making it this far and I hope you have learned something new! Also, special thanks to [James Munns](https://github.com/jamesmunns) the creator of the postcard ecosystem and Poststation for an early trial license key and being such a big help with any questions I had.
 I know this may sound like a paid for review, but this has just been a product I have really enjoyed working with and wanted to share with everyone. I can't recommend it enough, I even bought a license, so I can continue using it once the trial is up. 
 
 Don't forget you can just [download](https://poststation.rs/download/) and try it out today without even buying a license.

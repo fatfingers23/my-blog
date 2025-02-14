@@ -450,8 +450,7 @@ Poststation and your project.
 This is one of the perks of Poststation, we don't have to worry about any of this. It's taken care of for us and we have easy to use APIs to communicate to and from our microcontrollers in a well optimized way with the postcard ecosystem.
 
 ## JSON Rest API
-By default, the JSON Rest api is turned off. But you can turn it on by making a change to the [Poststation config file](https://onevariable.com/poststation-book/configuration.html) found via the
-the `poststation-cli folder` command.
+By default, the JSON Rest api is turned off. But you can turn it on by making a change to the [Poststation config file](https://onevariable.com/poststation-book/configuration.html) found via the `poststation-cli folder` command.
 
 To allow the api running on port 4444 you just need to uncomment `[apis.http]` and restart Poststation. 
 Your config should look something like this
@@ -499,7 +498,7 @@ curl --cacert "/home/baileytownsend/.local/share/poststation/ca-cert.pem" "https
 
 
 ```
-or you can just ignore the self signed cert completely with the `-k` option.
+or you can just ignore the self-signed cert completely with the `-k` option.
 ```bash
 curl "https://127.0.0.1:4444/api/devices" -k -q -H "Accept: application/json" | jq
 
@@ -529,7 +528,7 @@ I have plans to write a library in TypeScript along with an example project that
 I want to make it as simple as possible for newcomers to the embedded world to be able to use the tools they are used to and make amazing projects with them! 
 
 # Closing Remarks and Special Thanks
-I've just scratched the surface of Poststation in this blog post. I did not cover how it lets your Host do complicated things that are usually hard on Microcontrollers like web calls, or like generating images to be displayed on a e-ink screen. Didn't even talk about how you can use a Host as a way to pass messages onto other Microcontrollers or just have many connected to it as once.
+I've just scratched the surface of Poststation in this blog post. I did not cover how it lets your Host do complicated things that are usually hard on Microcontrollers like web calls, or like generating images to be displayed on an e-ink screen. Didn't even talk about how you can use a Host as a way to pass messages onto other Microcontrollers or just have many connected to it as once.
 But I will save that for another day or for you to find out on your own! 
 
 That's pretty much it! So far I have loved Poststation, between the ease of communications between devices, the excellent templates for writing your project. I think this is well worth buying and using, even if 

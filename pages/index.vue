@@ -35,7 +35,7 @@ onMounted(() => {
             Hey, i'm Bailey 👋
           </h1>
           <p class="py-6 font-poppins text-left">
-            Sometimes serious, sometimes not. In my day job, I'm a team lead a dotnet web application. In my free time, I follow whatever interests me. Be it retro gaming, retro console modding, microcontrollers, or anything else. Mostly will be talking about embedded development here, but can be a bit of anything.
+            Sometimes serious, sometimes not. In my day job, I'm a team lead on a dotnet web application. In my free time, I follow whatever interests me. Be it retro gaming, retro console modding, microcontrollers, or anything else. Mostly will be talking about embedded development here, but can be a bit of anything.
           </p>
           <div class="flex gap-2 max-lg:justify-center justify-center">
             <a

@@ -1,7 +1,7 @@
 ---
 title: ''
 description: ''
-date: "2024-08-16T01:08:00Z"
+date: "2025-08-16T01:08:00Z"
 draft: true
 image:
     src: "/article-assets/2/cover.png"

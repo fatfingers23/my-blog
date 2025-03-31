@@ -1,6 +1,6 @@
 ---
 title: 'Rust 🦀 on the 3DS'
-description: "Learn how to start building 3DS application's with Rust"
+description: "Learn how to start building 3DS applications with Rust"
 date: "2025-03-31T03:45:00Z"
 draft: false
 image:

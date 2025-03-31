@@ -37,7 +37,7 @@ It has the whole 3DS library, while also being able to natively run DS, GBA, and
 
 ## How does it work?
 Thanks to the work done by the [@rust3ds](https://github.com/rust3ds) organization you can write rust for the [armv6k-nintendo-3ds](https://doc.rust-lang.org/beta/rustc/platform-support/armv6k-nintendo-3ds.html#armv6k-nintendo-3ds) target.
-A lot of the apis for it are implemented by linking to a libc(devkitARM) library that is maintained by [devkitPro](https://devkitpro.org/wiki/Getting_Started). So a lot of what the ctru-rs/rust3ds project does is gives you, the end user, safe wrappers around the C libabries to make software for the 3DS in rust.
+A lot of the apis for it are implemented by linking to a libc(devkitARM) library that is maintained by [devkitPro](https://devkitpro.org/wiki/Getting_Started). So a lot of what the ctru-rs/rust3ds project does is gives you, the end user, safe wrappers around the C libraries to make software for the 3DS safely in rust.
 
 A lot of terms and organizations so I wanted to make a list to break it down. I am going to start with the C libraries. 
 - [devkitPro](https://devkitpro.org/wiki/Getting_Started) - The organization that provides the C libraries for the 3DS, along with other gaming consoles. 
@@ -46,7 +46,7 @@ A lot of terms and organizations so I wanted to make a list to break it down. I 
 - [citro2d](https://github.com/devkitPro/citro2d) - C library build on top of citro3d to display 2d graphics. Text, sprites, and 2d shapes.
 
 Then for the rust sie of things.
-- [rust3ds](https://github.com/rust3ds) - The organization that maintains support for the `armv6k-nintendo-3ds` target and safe rust bindings to the devkitPro C libraries.
+- [rust3ds](https://github.com/rust3ds) - The organization that maintains support for the `armv6k-nintendo-3ds` target and safe rust bindings to the devkitPro C libraries as well as crates to safely call them in a rusty way.
 - [ctru-sys](https://github.com/rust3ds/ctru-rs/tree/master/ctru-sys) - Direct rust bindings to the libctru C library, unsafe.
 - [ctru-rs](https://github.com/rust3ds/ctru-rs/tree/master/ctru-rs) - A Safe and idiomatic Rust wrapper around the libctru library. This is the library you call when writing Rust software on the 3DS. It handles all the [unsafe](https://doc.rust-lang.org/book/ch20-01-unsafe-rust.html) implementations for you.
 - [cargo 3ds](https://github.com/rust3ds/cargo-3ds) - cargo commands to work with 3DS projects. Example, you use `cargo 3ds build` and `cargo 3ds run` to build and run the project.
@@ -62,25 +62,28 @@ This guide assumes you have [rust](https://www.rust-lang.org/tools/install) inst
 Before you can build any of these projects you will need to install and set up the devkitARM toolchain by following their [Getting started guide](https://devkitpro.org/wiki/Getting_Started).
 1. Install and have the `dkp-pacman` command working in your terminal by following [this guide](https://devkitpro.org/wiki/Getting_Started).
 2. Once you have that setup run `sudo dkp-pacman -S 3ds-dev` to install the packages needed for 3DS dev.
-3. After this you need to make sure you have the following environment variables set. The path values are what I have from installing on PopOS. `DEVKITPRO`, `DEVKITARM`, and `DEVKITPPC`. My `.bashrc` looks like this
+3. After this you need to make sure you have the following environment variables set. The path values are what I have from installing on Pop!_OS. `DEVKITPRO`, `DEVKITARM`, and `DEVKITPPC`. My `.bashrc` looks like this
 ```bash
 export DEVKITPRO=/opt/devkitpro
 export DEVKITARM=${DEVKITPRO}/devkitARM
 export DEVKITPPC=${DEVKITPRO}/devkitPPC
 ```
-4.  You also need to make sure you have `/opt/devkitpro/tools/bin` and `/opt/devkitpro/devkitARM/bin` in your path. My `.bashrc` for that looks like this
+4.  You also need to make sure you have `/opt/devkitpro/tools/bin` and `/opt/devkitpro/devkitARM/bin` are in your path. My `.bashrc` for that looks like this
 ```bash
 export PATH=${DEVKITPRO}/tools/bin:$PATH
 export PATH=${DEVKITARM}/bin:$PATH
 ```
 
+If you get a `error: linker arm-none-eabi-gcc not found` it is most likely because of bullet point 4. So need to check those and make sure it is accessible. [Some more context](https://github.com/rust3ds/cargo-3ds/issues/73). 
+
 ### cargo-3ds
 [cargo 3ds](https://github.com/rust3ds/cargo-3ds) is a command tool you use to interact with your 3DS projects. You have to use this to build and run projects. Normal `cargo run` and `cargo build` does not work.
-You can do that by `cargo install --locked cargo-3ds`. When I first started using it I had the same problem as listed in [issue #68](https://github.com/rust3ds/cargo-3ds/issues/68) when using `cargo 3ds new`, but since then it has been resolved.
-If you have a similar problem may use `cargo install --locked --git https://github.com/rust3ds/cargo-3ds` instead to make sure you have the latest version with the patch.
+You can install it by `cargo install --locked cargo-3ds`.
 
 ### Creating a project
-To create a new project you can use `cargo 3ds new`, this will create a new project that you can build and run.
+To create a new project you can use `cargo 3ds new`, this will create a new project that you can build and run.  When I first started using it I had the same problem as listed in [issue #68](https://github.com/rust3ds/cargo-3ds/issues/68) when using `cargo 3ds new`, but since then it has been resolved.
+If you have a similar problem may use `cargo install --locked --git https://github.com/rust3ds/cargo-3ds` instead to make sure you have the latest version with the patch.
+
 Or for some extra bell and whistles you can use [my template](https://github.com/fatfingers23/citro2d-project-template) I have created for trying out my work on citro2d. I'll go a bit more into what those extras are in [My development workflow](#my-development-workflow). 
 
 ## Where do I even run this?
@@ -92,7 +95,7 @@ Building 3dsx: /home/baileytownsend/Documents/code/rust/games/citro2d-project-te
 Adding RomFS from /home/baileytownsend/Documents/code/rust/games/citro2d-project-template/romfs
 
 ```
-The file ending in `.3dsx` is what you want. This is what you install or click to run inside the emulator or on the 3DS. This is important mostly for when using a emulator. 
+The file ending in `.3dsx` is what you want. This is what you install on the 3DS or the file you open inside the emulator. This is important mostly for when using a emulator. 
 
 ### Emulators
 
@@ -111,13 +114,15 @@ shapes-example:
 ```
 
 ### Real hardware
-One of the coolest parts of writing software for these older game systems is being able to run it on the actual hardware. Thanks to homebrewing that is easy.
+One of the coolest parts of writing software for these older game systems is being able to run it on the actual hardware. I will never forget how awesome it was to the see the GBA load screen on real hardware before booting into a game I had made.
+
+Thanks to homebrewing it is easy to get what you write onto your 3DS.
 
 What you will need.
 * Any 3Ds or 2Ds model
 * Follow the [3DS Hacks Guide](https://3ds.hacks.guide/) to install a custom firmware on your 3DS. It does not matter which model, or version it has, the guide has a way for all of them.
 
-Once you have your 3DS loaded with the custom firmware and [the homebrew launcher](https://smealum.github.io/3ds/) setup. Open `the homebew launcher` and on the main screen press `Y` on your console. You should see the following screen below.
+Once you have your 3DS loaded with the custom firmware and [the homebrew launcher](https://smealum.github.io/3ds/) setup. Open `the homebew launcher` and on the main screen of the homebrew launcher press `Y` on your console. You should see the following screen below.
 ![Picture of a 3DS showing the homebrew launcher screen with the 3dslink netLoader](/article-assets/8/3dslink.webp)
 
 After that it is as easy as using `cargo 3ds run` to send the program over to the 3DS! If you have issues with it not being able to find the device make sure your 3DS is on the same network and can use this command to specify the ip address found on the 3dslink NetLoader screen `cargo 3ds run --address xxx.xxx.xxx.xxx`
@@ -151,6 +156,8 @@ line_format = "{diagnostic.level}|:|{span.file_name}|:|{span.line_start}|:|{span
 path = ".bacon-locations"
 ```
 5. You need to make sure bacon is running for it to work with VS Code, can do that with `bacon -j bacon-ls`
+
+Then that is it! You should now be seeing the output of `cargo 3ds check` in your editor to help you write your 3ds programs.
 
 
 ## 2d Graphics

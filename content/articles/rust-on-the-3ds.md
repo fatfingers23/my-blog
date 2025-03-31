@@ -1,8 +1,8 @@
 ---
 title: 'Rust 🦀 on the 3DS'
 description: "Learn how to start building 3DS application's with Rust"
-date: "2025-03-31T00:00:00Z"
-draft: true
+date: "2025-03-31T03:45:00Z"
+draft: false
 image:
     src: "/article-assets/8/cover.webp"
     alt: ""
@@ -32,7 +32,7 @@ It has the whole 3DS library, while also being able to natively run DS, GBA, and
     * [Real hardware](#real-hardware)
   * [My development workflow](#my-development-workflow)
 * [2d Graphics](#2d-graphics)
-* Closing
+* [Closing](#closing)
 
 
 ## How does it work?
@@ -160,15 +160,21 @@ path = ".bacon-locations"
 Then that is it! You should now be seeing the output of `cargo 3ds check` in your editor to help you write your 3ds programs.
 
 
-## 2d Graphics
+# 2d Graphics
+Since the 3DS is a gaming console I really wanted to try out making some simple games on it. Ctru-sys has a ton of [great examples](https://github.com/rust3ds/ctru-rs/tree/master/ctru-rs/examples) to get started and to write some great homebrew apps. But I did not find any to easily make games.
+I had found that they have started an implementation of [citro3d](https://github.com/rust3ds/citro3d-rs) for 3d graphics and they have a really cool example app that shows a triangle in 3D, but I'll be honest 3d graphics is a bit over my head and I wanted something simpler to start with.
 
-Talk about how ctru-rs had a lot of bindings for making 3DS software, but i did not find any easy ones for makign simple games, and 2d grpahics is easier to start with so i looked into getting citro2d working and talk about the complexes too of citro2d being built on top of citro 3d
+There is a C library called [citro2d](https://github.com/devkitPro/citro2d) that is built on top of [citro3d](https://github.com/devkitPro/citro3d) that has apis for rendering shapes, loading in custom fonts, and even sprite sheets. Perfect! Just where I wanted to start, expect for one thing. [Citro3d-rs](https://github.com/rust3ds/citro3d-rs) had been started,
+but since the C library builds on top of the 3d one the work on the 2d rust implementation had not been started. So [I decided to take a look at it](https://github.com/rust3ds/citro3d-rs/pull/71) and see if I could get the bare minimal going. And I am happy to say I have had some success! 
+
+![A picture of a 3DS showing the 2d_shapes demo](article-assets/8/shapes_2d.webp)
+The citro [2d_shapes](https://github.com/devkitPro/3ds-examples/tree/master/graphics/gpu/2d_shapes) example in rust found [here](https://github.com/rust3ds/citro3d-rs/blob/95875c9f1c7f1f54e1dacdc711c4d3c00e3c5e53/citro2d/examples/2d_shapes.rs)
+
+![A picture of a 3DS showing the classic breakout game](article-assets/8/breakout.webp)
+A simple implementation of the classic game breakout in rust found [here](https://github.com/rust3ds/citro3d-rs/blob/95875c9f1c7f1f54e1dacdc711c4d3c00e3c5e53/citro2d/examples/breakout.rs) 
+
+Right now it can only render the 2D shapes on the top and bottom screen. But I have plans to add the rest of the features citro2d has, like custom fonts and sprites. If you're interested in the status of that can follow along on [this draft PR](https://github.com/rust3ds/citro3d-rs/pull/71).
 
 
-# Notes
-* Also write how I use bacon ls
-* Talk about how you can use Cargo 3ds for a new project or make a template that is the 2d shapes that calls to the citr3d fork I have
-* looks like 3ds cargo command works. recommend using `cargo install --locked --git https://github.com/rust3ds/cargo-3ds`
-* Clean up repo with a readme and make a PR as a draft?
-* Talk about how yeah it's not truly truly running rust 100%, but the goal is to have safe apis so YOU can write rust apps and games
-* Show an example of my env variables. What was my issue and dont need a config.toml
+# Closing
+That's pretty much it! Thanks for checking out my post about using Rust on the 3DS, and thank you to the work done by [@rust3ds](https://github.com/rust3ds) who without them none of this would be possible!

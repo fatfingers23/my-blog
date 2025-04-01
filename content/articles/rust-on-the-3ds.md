@@ -160,7 +160,7 @@ path = ".bacon-locations"
 Then that is it! You should now be seeing the output of `cargo 3ds check` in your editor to help you write your 3ds programs.
 
 
-# 2d Graphics
+## 2d Graphics
 Since the 3DS is a gaming console I really wanted to try out making some simple games on it. Ctru-sys has a ton of [great examples](https://github.com/rust3ds/ctru-rs/tree/master/ctru-rs/examples) to get started and to write some great homebrew apps. But I did not find any to easily make games.
 I had found that they have started an implementation of [citro3d](https://github.com/rust3ds/citro3d-rs) for 3d graphics and they have a really cool example app that shows a triangle in 3D, but I'll be honest 3d graphics is a bit over my head and I wanted something simpler to start with.
 

@@ -36,6 +36,9 @@ onMounted(() => {
           </h1>
           <p class="py-6 font-poppins text-left">
             Sometimes serious, sometimes not. In my day job, I'm a team lead on a dotnet web application. In my free time, I follow whatever interests me. Be it retro gaming, retro console modding, microcontrollers, or anything else. Mostly will be talking about embedded development here, but can be a bit of anything.
+            <a
+              href="https://oasiscenter.org/"
+              class="link text-primary">Thinking of sponsoring me? Maybe make a donation to the Oasis Center instead!</a>
           </p>
           <div class="flex gap-2 max-lg:justify-center justify-center">
             <a
@@ -89,6 +92,7 @@ onMounted(() => {
             </a>
 
           </div>
+
         </div>
       </div>
     </div>

@@ -24,6 +24,9 @@
                 class="w-full object-cover rounded-lg h-60"
               >
             </figure>
+            <a
+              href="https://oasiscenter.org/"
+              class="link text-primary">Thinking of sponsoring me? Maybe make a donation to the Oasis Center instead!</a>
             <div class="p-6 rounded-lg mb-6">
               <h1 class="mb-2 font-poppins text-2xl font-black md:text-4xl ">
                 {{ doc.title }}

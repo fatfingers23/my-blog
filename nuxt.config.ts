@@ -72,6 +72,7 @@ export default defineNuxtConfig({
         "/articles/rust-on-the-10-cent-microcontroller": {prerender: true},
         "/articles/poststation-on-the-rp2350": {prerender: true},
         "/articles/rust-on-the-3ds": {prerender: true},
+        "/articles/rusty-statusphere": {prerender: true},
         "/feed.xml": {prerender: true},
     },
 });

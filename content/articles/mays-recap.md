@@ -28,6 +28,7 @@ It has been a pretty busy month! Well closer to 2 months truly. I usually focus 
   - did:web routing
   - the keys on pds are just there for the sshing
   - backfilling with the list collections
+  - Talk about the atrium template I did
   - Talk about the nashville meetup
 - Learning some GO and started helping with teal. maybe shoutout daniel roe
 - Talk about the rust trmnl firmware
@@ -37,12 +38,40 @@ It has been a pretty busy month! Well closer to 2 months truly. I usually focus 
 ![img](https://2048.blue/assets/imgs/banner.png)
 
 About 2 months ago my new phone came in. It is a [Minimal Phone](https://minimalcompany.com/). It's an e-ink phone with a physical keyboard. The attraction to it is it runs android, so I have full access to the apps I need for work and to be social with irl friends and online friends. But since it is e-ink it cuts down my usage and makes everything feel much more purposeful. Well with it being e-ink I found playing the (now classic) [2048](https://en.wikipedia.org/wiki/2048_(video_game)) puzzle game perfect for the device when I had time to kill.
-But in the versions I tried, I found myself wanting WASD keybinds since my phone had a keyboard and reduce animations. Well as everyone has probably thought at one point or another, why don't I just make one. So I did.
-:bluesky-embedded{:postAtUri="at://did:plc:rnpkyqnmsw4ipey6eotbdnnf/app.bsky.feed.post/3lmahydrde22i"}
+But in the versions I tried, I found myself wanting WASD keybinds since my phone had a keyboard and reduce animations. Well, as everyone has probably thought at one point or another, why don't I just make one. So I did.
+::bluesky-embedded{:postAtUri="at://did:plc:rnpkyqnmsw4ipey6eotbdnnf/app.bsky.feed.post/3lmahydrde22i"}
+::
+
+Since I had just done a [Rust version of Statusphere](https://github.com/fatfingers23/rusty_statusphere_example_app)
+and created [esquema](https://github.com/fatfingers23/rusty_statusphere_example_app)(A fork of [atrium's lex code gen](https://github.com/atrium-rs/atrium/tree/main/lexicon/atrium-codegen)
+so it can be used as a cli).
+I thought it would be a lot of fun to make it on the atmosphere.
+Maybe even bring back some of that fun exploration
+of when FaceBook was getting big and doing all the social media games. 
+
+
+The main features I wanted out with what I'm calling v0.1 were:
+- Actual game play
+- Stats
+- OAuth login for atproto so it will all be client side
+- Store your games and stats to your atproto repo
+- History View to see previous games and to help resync any high scoring games that may of failed to sync
+
+v1.0 is going to be the actual "social" features.
+- Global Leaderboards
+- Friends(mutual) Leaderboards
+- A feed to see when people get achievements or their recent games
+-
+
+
+The alpha of at://2048 has been out for about a month now.
+I've been pretty proud of how it has turned out! And the feedback has been great. It has been awesome to see so many people play it and have fun. Adding the share button was the best idea because it has been rewarding to see people share their games with friends and having fun.
+I think I got most of the major bugs out of the way and the initial goals reached.
+As of writing this post 180 accounts have played and published an at://2048 game to their atproto repo,
+and a total of 3,457 games have been published.
 
 
 
-The alpha of at://2048 has been out for about a month now. I've been pretty proud of how it has turned out! I think I got most of the major bugs out of the way and the initial goals reached. As of writing this post 180 accounts have played and published an at://2048 game to their atproto repo, and a total of 3,457 games have been published. 
 I am going to come back and finish out the leaderboards and social feeds, but I needed a bit of a break and to look at some other codebases for a bit. I expect to start on the appview in June.
 
 

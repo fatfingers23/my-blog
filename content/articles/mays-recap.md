@@ -5,7 +5,7 @@ date: "2025-05-30T21:00:00Z"
 draft: true
 image:
     src: "/article-assets/11/cover.png"
-    alt: ""
+    alt: "A picture of a tucker hat that says May's recap"
 head:
     meta:
       - name: "twitter:card"
@@ -13,24 +13,10 @@ head:
       - name: "twitter:image"
         content: "https://baileytownsend.dev/article-assets/11/cover.png"
       - name: "keywords"    
-        content: ""
+        content: "atprotocol,teal.fm, atproto"
       - name: 'author'
         content: 'Bailey Townsend'
 ---
-- Talk about work on at://2048
-  - Talk about the release seems like that happened in may wtf
-  - History view
-  - Future appview plans
-- Talk about atproto findings. A lot written on https://ruthub.com/kb/baileytownsend.dev
-  - did:web routing
-  - the keys on pds are just there for the sshing
-  - backfilling with the list collections
-  - Talk about the atrium template I did
-  - Talk about the nashville meetup
-- Learning some GO and started helping with teal. maybe shoutout daniel roe
-- Talk about the rust trmnl firmware
-  - Challenges with SPI and having to spilt the data send in half
-
 
 It has been a pretty busy month! Well, closer to 2 months truly. I usually focus on one topic in a blog post, but I've been a bit all over the place this month, so I thought a recap of what open source work I've been doing would be fun.
 
@@ -41,10 +27,10 @@ It has been a pretty busy month! Well, closer to 2 months truly. I usually focus
   * [Ripping private keys from a PDS](#ripping-private-keys-from-a-pds)
   * [Backfilling missed records](#backfilling-missed-records)
   * [atrium template](#atrium-template)
-  * [did:web proxying]()
-  * [Nashville ATProtocol meetup]()
+  * [did:web proxying](#didweb-proxying)
 * [Working On Teal](#working-on-teal)
-* [A rusty TRMNL](#talk-about-the-rust-trmnl-firmware)
+* [A rusty TRMNL](#a-rusty-trmnl-firmware)
+* [Closing](#closing)
 
 # at://2048
 ![img](https://2048.blue/assets/imgs/banner.png)
@@ -162,8 +148,46 @@ It also has a quick JetStream listener implementation that works on WASM web tar
 ::bluesky-embedded{:postAtUri="at://did:plc:rnpkyqnmsw4ipey6eotbdnnf/app.bsky.feed.post/3lpsmpz7n3k23"}
 ::
 
-- did:web routing
-- Talk about the nashville meetup
+
+# did:web proxying
+
+I recently learned something pretty cool that I had missed.
+When making requests to a PDS
+if you set the `atproto-proxy` header to a did:web with an endpoint identifier it will reroute the request to that service as long
+as it's prefixed `/xrpc/`.
+I am going to use [teal.fm](https://teal.fm) as an example singe this is how the appview works for it.
+
+So for teal.fm you would set a header like this: `atproto-proxy: did:web:notreal.teal.fm#teal_fm_appview`
+
+That will then check the web address `https://notreal.teal.fm/.well-known/did.json` and expect a `did.json` about like this
+```json
+{
+  "@context": [
+    "https://www.w3.org/ns/did/v1"
+  ],
+  "id": "did:web:notreal.teal.fm",
+  "verificationMethod": [
+    {
+      "id": "did:web:notreal.teal.fm#atproto",
+      "type": "Multikey",
+      "controller": "did:web:notreal.teal.fm",
+      "publicKeyMultibase": "zQ3sheEnMKhEK87PSu4P2mjAevViqHcjKmgxBWsDQPjLRM9wP"
+    }
+  ],
+  "service": [
+    {
+      "id": "#teal_fm_appview",
+      "type": "TealFmAppView",
+      "serviceEndpoint": "https://notreal.teal.fm"
+    }
+  ]
+}
+```
+
+It will then grab the service with the id `#teal_fm_appview` and reroute the request to that endpoint.
+So the cool thing about this is your client can just have a `did:web` set in preference
+and using atprotocol will always know how to route the request to the appview. Plus it's a pretty cool way to allow clients to pick which appview they want to use if there's a fork.
+
 
 # Working On Teal
 ![](https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rnpkyqnmsw4ipey6eotbdnnf/bafkreicw5yrfzesh2kgs42athqkiunzpiiyeremywsmgzcmhlyb3r2hcxq@jpeg)
@@ -176,7 +200,53 @@ A couple of weeks ago I made a post about wanting to try out [last.fm](https://w
 
 Well, it kind of hit me then. Why wait? teal.fm is [open source](https://github.com/teal-fm), I could start today. I like the team working on teal.fm, and it's a project I would really like to have. So it just clicked here was a project I could help out with. Which is the cool thing about open source. So since then I've decided to dedicate a few hours a week helping out where I can.
 
+I've mostly been helping with [piper](https://github.com/teal-fm/piper) the music scaper for teal.fm.
+It has been a lot of fun!
+It also has given me a chance to learn a bit of Go since that is the language it is written in.
+But since working on teal i've also been running piper most of the time I'm at my computer
+and now have 1,351 `fm.teal.alpha.feed.play` records on my PDS. 
 
+![](./article-assets/11/teal_stamps.png)
 
-Talk abotu what i've been working on. Piper, docker, etc
+I also have a [PR](https://github.com/teal-fm/teal/pull/62)
+submitted to get the whole teal.fm stack
+running locally with a docker compose.
+I am hoping is it makes it a bit easier
+for developers working on one section of the stack to get up and running.
 
+Working on teal.fm has been a lot of fun. I am hoping to put a good chunk of my free time this summer into helping with the project.
+
+# A rusty TRMNL firmware
+
+My [TRMNL](https://usetrmnl.com/?ref=bt15) came in this month!
+I have been pretty excited about getting this device.
+If you have not heard of the TRMNL it is a esp32 e-ink display that you can use premade plugins
+or even [write your own](https://docs.usetrmnl.com/go/private-plugins/templates).
+It is a really cool device,
+and they have made the [firmware open source](https://github.com/usetrmnl/firmware) as well as [alternatives to hosting platforms](https://docs.usetrmnl.com/go/diy/byos) for the plugins.
+
+I decided
+since this was a device
+that used a [WaveShare epd screen,](https://www.waveshare.com/wiki/7.5inch_e-Paper_HAT_Manual#Overview)
+and I am pretty familiar with them,
+it would be a good chance to try out [stream.place](https://stream.place)
+
+![](./article-assets/11/stream.jpg)
+
+It was a lot of fun! I did not get the full firmware completed, but we did finally get a static BMP image showing on the screen and web requests to their servers.
+![](https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rnpkyqnmsw4ipey6eotbdnnf/bafkreicyurs34zghkth2wn5p4rmi72ws5dx45nunxmriayfvyhx2zrqfvu@jpeg)
+
+Sadly a few days later my desktop crashed so I have not yet open sourced the firmware,
+or uploaded the stream recording yet.
+But I am hoping to do that sometime in June. I may also do a longer blog post just about it and writing the firmware for it.
+But if you are thinking about getting a TRMNL,
+you can use my discount code of [bt15](https://usetrmnl.com/?ref=bt15) to get $15 off your first order!
+
+# Closing
+It felt like a really long month!
+Or at least a busy one.
+I feel like I learned a lot this month and got to work on a variety of projects.
+Next month I will be on vacation for a bit so may not get as much done,
+but I am hoping to work on the TRMNL, Firmware, at://2048's appview, and make some contributions to teal.fm. 
+
+Thanks for reading!

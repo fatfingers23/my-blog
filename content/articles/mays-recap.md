@@ -129,7 +129,7 @@ I found the `com.atproto.sync.listReposByCollection`,
 which you can call on a relay (like `relay1.us-west.bsky.network`) to get a list of user repos that have that lexicon.
 Then you know which repos to call to check for the records to backfill your appview.
 Here's the url for 2048.blue.game's records.
-https://relay1.us-west.bsky.network/xrpc/com.atproto.sync.listReposByCollection?collection=blue.2048.game
+[https://relay1.us-west.bsky.network/xrpc/com.atproto.sync.listReposByCollection?collection=blue.2048.game](https://relay1.us-west.bsky.network/xrpc/com.atproto.sync.listReposByCollection?collection=blue.2048.game)
 
 
 # atrium template

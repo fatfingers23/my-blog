@@ -1,8 +1,8 @@
 ---
 title: "May's Recap"
 description: "A recap of what i've been up to in May"
-date: "2025-05-30T21:00:00Z"
-draft: true
+date: "2025-06-03T01:00:00Z"
+draft: false
 image:
     src: "/article-assets/11/cover.png"
     alt: "A picture of a tucker hat that says May's recap"
@@ -18,7 +18,7 @@ head:
         content: 'Bailey Townsend'
 ---
 
-It has been a pretty busy month! Well, closer to 2 months truly. I usually focus on one topic in a blog post, but I've been a bit all over the place this month, so I thought a recap of what open source work I've been doing would be fun.
+It has been a pretty busy month! Well, closer to 2 months truly since my last set of blog posts were at the start of April. I usually focus on one topic in a blog post, but I've been a bit all over the place this month, so I thought a recap of what open source work I've been doing would be fun.
 
  
 # Table of Contents
@@ -33,10 +33,11 @@ It has been a pretty busy month! Well, closer to 2 months truly. I usually focus
 * [Closing](#closing)
 
 # at://2048
-![img](https://2048.blue/assets/imgs/banner.png)
+![Picture of a game of 2048 with the text at://2048 above it](https://2048.blue/assets/imgs/banner.png)
 
 About 2 months ago my new phone came in. It is a [Minimal Phone](https://minimalcompany.com/). It's an e-ink phone with a physical keyboard. The attraction to it is it runs android, so I have full access to the apps I need for work and to be social with irl friends and online friends. But since it is e-ink it cuts down my usage and makes everything feel much more purposeful. Well with it being e-ink I found playing the (now classic) [2048](https://en.wikipedia.org/wiki/2048_(video_game)) puzzle game perfect for the device when I had time to kill.
 But in the versions I tried, I found myself wanting WASD keybinds since my phone had a keyboard and reduce animations for the screen. Well, as everyone has probably thought at one point or another, I thought why don't I make one. So I did.
+
 ::bluesky-embedded{:postAtUri="at://did:plc:rnpkyqnmsw4ipey6eotbdnnf/app.bsky.feed.post/3lmahydrde22i"}
 ::
 
@@ -75,7 +76,7 @@ I am going to come back and finish out the leaderboards and social feeds, but I 
 
 
 # ATProtocol Shenanigans
-![](https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rnpkyqnmsw4ipey6eotbdnnf/bafkreiax6zhyco4ivid2eeejm3lqaztsndmf2t55pd6vgf7ivimj7kklqe@jpeg)
+![The "How do you do fellow kids meme" But says How do you do fellow at proto devs with at blue. On steve buscemi's shirt there is the  @ atprotocol logo and on his hat is the little goose(?) from the atmosphere conf](https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rnpkyqnmsw4ipey6eotbdnnf/bafkreiax6zhyco4ivid2eeejm3lqaztsndmf2t55pd6vgf7ivimj7kklqe@jpeg)
 
 For the past couple of months I've reallly gotten into [ATProtocol](https://atproto.com/).
 To me it's a well thought out way to build public applications and has a great community of developers.
@@ -84,9 +85,9 @@ I thought I would highlight some of the more interesting things I've learned.
 
 ## Ripping private keys from a PDS
 After the first meeting with [#IndieSkyWG](https://atproto.wiki/en/working-groups/indiesky) talking about PDS migrations and backup, I got curious about that in a nontraditional way and how that data is kept on the PDS side.
-What was learned that the `verificationMethod:publicKeyMultibase` is the public key to a keypair just for your account that is used to sign JWTs for accessing your PDS and is also what is used to sign your PDS repo (all those CIDS). 
+What I learned was that the `verificationMethod:publicKeyMultibase` is the public key to a keypair just for your account that is used to sign JWTs for accessing your PDS and is also what is used to sign your PDS repo (all those CIDS). 
 These are saved on your PDS at `/pds/actors/{number not sure meaning}/{your did}/key`. This is the keypair bytes you can load up to an atproto crypto library to sign various operations. And since this is just a file, you can SSH in and copy it out if you have access to your PDS.
-Then you have the private key and can use it for whatever you want. Here's an example in rust using [atrium-crypto](https://crates.io/crates/atrium-crypto) to read and parse the key.
+Then you have the private key and can use it for whatever you want. Here's an example in rust using [atrium-crypto](https://crates.io/crates/atrium-crypto) to read and parse the key from the file.
 
 ```rust
 use atrium_crypto::keypair::{Did, Secp256k1Keypair};
@@ -122,7 +123,7 @@ Turns out that was not a concern at all.
 I was originally thinking I would have to wait till a new record was created
 and then retroactively go and check their PDS to pick up any previous games.
 Turns out I don't have to do that either.
-AtProtocol already thought of that and have a solution. 
+ATProtocol already thought of that and have a solution. 
 
 I found the `com.atproto.sync.listReposByCollection`,
 which you can call on a relay (like `relay1.us-west.bsky.network`) to get a list of user repos that have that lexicon.
@@ -155,7 +156,7 @@ I recently learned something pretty cool that I had missed.
 When making requests to a PDS
 if you set the `atproto-proxy` header to a did:web with an endpoint identifier it will reroute the request to that service as long
 as it's prefixed `/xrpc/`.
-I am going to use [teal.fm](https://teal.fm) as an example singe this is how the appview works for it.
+I am going to use [teal.fm](https://teal.fm) as an example since how their appview is setup to be accessed.
 
 So for teal.fm you would set a header like this: `atproto-proxy: did:web:notreal.teal.fm#teal_fm_appview`
 
@@ -190,7 +191,7 @@ and using atprotocol will always know how to route the request to the appview. P
 
 
 # Working On Teal
-![](https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rnpkyqnmsw4ipey6eotbdnnf/bafkreicw5yrfzesh2kgs42athqkiunzpiiyeremywsmgzcmhlyb3r2hcxq@jpeg)
+![Picture of the color teal](https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rnpkyqnmsw4ipey6eotbdnnf/bafkreicw5yrfzesh2kgs42athqkiunzpiiyeremywsmgzcmhlyb3r2hcxq@jpeg)
 I've sort of been looking for an atproto project that I could start making weekly contributions to help out in. Mostly, I've just have learned a lot more about the protocol, and I wanted to give back to the community as a whole in some way. There's a lot going in the world right now, and although nothing I am doing is changing the world in a real way, it feels good to give back in someway and help where I can.
 
 A couple of weeks ago I made a post about wanting to try out [last.fm](https://www.last.fm/) to have some stats of the music I've been listening to. Well [@daniel roe](https://bsky.app/profile/danielroe.dev) replied to wait on [teal.fm](https://teal.fm)  
@@ -206,7 +207,7 @@ It also has given me a chance to learn a bit of Go since that is the language it
 But since working on teal i've also been running piper most of the time I'm at my computer
 and now have 1,351 `fm.teal.alpha.feed.play` records on my PDS. 
 
-![](./article-assets/11/teal_stamps.png)
+![Picture of my atproto repo showing fm.teal.alpha.feed.play records](./article-assets/11/teal_stamps.png)
 
 I also have a [PR](https://github.com/teal-fm/teal/pull/62)
 submitted to get the whole teal.fm stack
@@ -231,22 +232,22 @@ that used a [WaveShare epd screen,](https://www.waveshare.com/wiki/7.5inch_e-Pap
 and I am pretty familiar with them,
 it would be a good chance to try out [stream.place](https://stream.place)
 
-![](./article-assets/11/stream.jpg)
+![A thumbnail of my stream](./article-assets/11/stream.jpg)
 
 It was a lot of fun! I did not get the full firmware completed, but we did finally get a static BMP image showing on the screen and web requests to their servers.
-![](https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rnpkyqnmsw4ipey6eotbdnnf/bafkreicyurs34zghkth2wn5p4rmi72ws5dx45nunxmriayfvyhx2zrqfvu@jpeg)
+![Picture of a TRMNL display showing a picture of ferris](https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rnpkyqnmsw4ipey6eotbdnnf/bafkreicyurs34zghkth2wn5p4rmi72ws5dx45nunxmriayfvyhx2zrqfvu@jpeg)
 
-Sadly a few days later my desktop crashed so I have not yet open sourced the firmware,
+Sadly, a few days later my desktop crashed, so I have not yet had the time to open sourced the firmware,
 or uploaded the stream recording yet.
 But I am hoping to do that sometime in June. I may also do a longer blog post just about it and writing the firmware for it.
 But if you are thinking about getting a TRMNL,
-you can use my discount code of [bt15](https://usetrmnl.com/?ref=bt15) to get $15 off your first order!
+you can use my discount code of [bt15](https://usetrmnl.com/?ref=bt15) to get $15 off your order!
 
 # Closing
 It felt like a really long month!
 Or at least a busy one.
 I feel like I learned a lot this month and got to work on a variety of projects.
 Next month I will be on vacation for a bit so may not get as much done,
-but I am hoping to work on the TRMNL, Firmware, at://2048's appview, and make some contributions to teal.fm. 
+but I am hoping to work on the TRMNL rust firmware, at://2048's appview, and make some contributions to teal.fm. 
 
 Thanks for reading!

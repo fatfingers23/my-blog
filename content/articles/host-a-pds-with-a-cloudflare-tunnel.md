@@ -1,5 +1,5 @@
 ---
-title: 'Host a PDS via Cloudflare Tunnel'
+title: 'Host a PDS via a Cloudflare Tunnel'
 description: 'Learn how to use a Cloudflare Tunnel to host your PDS on a local network.'
 date: "2025-07-29T04:37:00Z"
 draft: false

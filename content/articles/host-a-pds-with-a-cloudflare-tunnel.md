@@ -1,7 +1,7 @@
 ---
 title: 'Host a PDS via Cloudflare Tunnel'
 description: 'Learn how to use a Cloudflare Tunnel to host your PDS on a local network.'
-date: "2025-07-28T04:37:00Z"
+date: "2025-07-29T04:37:00Z"
 draft: false
 image:
     src: "/article-assets/12/cover.png"

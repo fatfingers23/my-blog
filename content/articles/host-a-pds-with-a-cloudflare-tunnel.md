@@ -34,7 +34,7 @@ Today we are going to set up a PDS and use a [Cloudflare Tunnel](https://develop
 
 
 # Requirements
-- A domain that is hosted on Cloudflare. I also recommend using a top level domain, Like `attoolbox.app`. Not something like `pds.attoolbox.app` if you are planing on using handles on it like `bailey.attoolbox.app`. If you don't have one, can do `pds.yourdomain.name`. Just may expect to have to manually set a `_atprot.` DNS TXT record so they resolve.
+- A domain that is hosted on Cloudflare. I also recommend using a top level domain, Like `attoolbox.app`. Not something like `pds.attoolbox.app` if you are planing on using handles on it like `bailey.attoolbox.app`. If you don't have one, can do `pds.yourdomain.name`. Just may expect to have to manually set a `_atproto.` DNS TXT record so they resolve.
 - A Linux Distro. Raspberry Pi OS works great and what I used when writing this guide. Or I use Ubuntu 24.04 LTS for my main.
 - About 30 minutes of free time
 
